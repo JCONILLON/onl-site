@@ -364,6 +364,16 @@
       padding-bottom: 64px;
       overflow: hidden;
     }
+    #topoBg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.18;
+      pointer-events: none;
+      z-index: 0;
+      display: block;
+    }
     #hero::before {
       content: '';
       position: absolute;
@@ -565,35 +575,6 @@
     }
     #about .container { position: relative; z-index: 1; }
 
-    /* ─── IMAGE STRIP ────────────────────────────────────────────────────── */
-    .img-strip {
-      position: relative;
-      width: 100%;
-      height: 420px;
-      overflow: hidden;
-    }
-    .img-strip img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center 40%;
-      display: block;
-      filter: brightness(0.45) grayscale(0.3);
-      transform: scale(1.04);
-      transition: transform 8s ease;
-    }
-    .img-strip:hover img { transform: scale(1.0); }
-    .img-strip-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to bottom,
-        var(--bg) 0%,
-        transparent 18%,
-        transparent 82%,
-        var(--bg) 100%
-      );
-    }
 
     .about-grid {
       display: grid;
@@ -1012,6 +993,118 @@
     }
     .prep-card p em { font-style: italic; color: var(--text-muted); }
 
+    /* ─── HOW IT WORKS ──────────────────────────────────────────────────────── */
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      margin-top: 64px;
+      position: relative;
+    }
+    .process-grid::before {
+      content: '';
+      position: absolute;
+      top: 22px;
+      left: 12.5%;
+      right: 12.5%;
+      height: 1px;
+      background: var(--border-mid);
+    }
+    .process-step {
+      padding: 0 24px 0 0;
+    }
+    .process-num {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      margin-bottom: 24px;
+      position: relative;
+      display: inline-block;
+    }
+    .process-num::before {
+      content: '';
+      display: block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-bottom: 16px;
+    }
+    .process-step h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+    .process-step p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    @media (max-width: 768px) {
+      .process-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .process-grid::before { display: none; }
+    }
+    @media (max-width: 480px) {
+      .process-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── CONTACT FORM ───────────────────────────────────────────────────────── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .contact-left h2 { margin-bottom: 16px; }
+    .contact-left p { color: var(--text-muted); line-height: 1.7; margin-bottom: 32px; }
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      background: var(--bg-card);
+      border: 1px solid var(--border-mid);
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent);
+    }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    .form-group select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23777' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+    .form-group select option { background: #1a1a1a; }
+    .form-submit { margin-top: 4px; }
+    .form-note { font-size: 0.75rem; color: var(--text-dim); margin-top: 8px; }
+    .form-success { display: none; padding: 16px; background: rgba(192,120,72,0.1); border: 1px solid var(--accent); border-radius: 8px; color: var(--accent); font-size: 0.9rem; text-align: center; }
+    @media (max-width: 900px) {
+      .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+
     /* ─── CONTACT ────────────────────────────────────────────────────────────── */
     .contact-centered {
       max-width: 640px;
@@ -1237,6 +1330,9 @@
   <!-- ═══════════════════════════════════════════════════════════════ HERO -->
   <section id="hero">
 
+    <!-- Topographic background canvas -->
+    <canvas id="topoBg" aria-hidden="true"></canvas>
+
     <!-- Ghost background number -->
     <div class="hero-bg-num" aria-hidden="true">3K</div>
 
@@ -1292,14 +1388,6 @@
   </div>
 
   <!-- ══════════════════════════════════════════════════════════════ ABOUT -->
-  <!-- ══════════════════════════════════════════════════ IMAGE ATMOSPHÉRIQUE -->
-  <div class="img-strip" aria-hidden="true">
-    <img src="https://images.unsplash.com/photo-aR5wLLNdt54?auto=format&fit=crop&w=1800&q=80"
-         alt=""
-         loading="lazy"
-         onerror="this.closest('.img-strip').style.display='none'">
-    <div class="img-strip-overlay"></div>
-  </div>
 
   <section id="about" class="section-divider">
     <canvas id="spectrumBg" aria-hidden="true"></canvas>
@@ -1309,10 +1397,9 @@
       </div>
       <div class="about-grid">
         <div class="about-bio reveal">
-          <p data-i18n="about.p1">Hi, I'm Jean-Charles, a French mastering engineer. I began supporting artists and working on mastering in 2020 during the COVID pandemic. Since then, I've gained the trust of numerous artists and labels, and I'm truly grateful for the opportunities.</p>
-          <p data-i18n="about.p2">Over the past few years, I've mixed and mastered over <strong>3,000 tracks</strong>, offering extensive feedback and advice to help producers bring their projects to life.</p>
-          <p data-i18n="about.p3">While my primary focus is on <strong>techno and electronic music</strong>, I am genuinely curious and open to all genres. I have a background as a DJ and have produced industrial techno, with my tracks played by Rebekah, Paula Temple, Nico Moreno, AnD and others.</p>
-          <p data-i18n="about.p4">Beyond the technical side, I enjoy talking with artists about production, mixing, DJing, and strategy. You don't just get a mastered track — you also get feedback, advice, and knowledge for your next projects. I reply to every message and always respect agreed deadlines.</p>
+          <p data-i18n="about.p1">I'm Jean-Charles, a mastering engineer based in Paris. I got into this in 2020 and it quickly became the thing I spend most of my time on.</p>
+          <p data-i18n="about.p2">Since then I've worked on over <strong>3,500 tracks</strong> across techno, electronic, industrial and beyond. I come from a DJ and production background, with tracks played by Rebekah, Paula Temple, Nico Moreno and AnD, so I understand what artists are trying to achieve before they even explain it.</p>
+          <p data-i18n="about.p3">What I care about is the conversation around the music, not just the technical result. Every project gets honest feedback, real advice, and a quick turnaround. I answer every message.</p>
           <div class="about-played">
             <p class="about-played-label" data-i18n="about.played.label">Tracks played by</p>
             <p class="about-played-names">Rebekah &nbsp;·&nbsp; Paula Temple &nbsp;·&nbsp; Nico Moreno &nbsp;·&nbsp; AnD&hellip;</p>
@@ -1320,16 +1407,16 @@
         </div>
         <div class="about-meta reveal reveal-delay-1">
           <div class="stat-block">
-            <div class="stat-value">3,000+</div>
-            <div class="stat-label" data-i18n="about.stat1">Tracks mixed &amp; mastered</div>
+            <div class="stat-value">3,500+</div>
+            <div class="stat-label" data-i18n="about.stat1">Masters</div>
           </div>
           <div class="stat-block">
             <div class="stat-value">2020</div>
             <div class="stat-label" data-i18n="about.stat2">Active since</div>
           </div>
           <div class="stat-block">
-            <div class="stat-value">100%</div>
-            <div class="stat-label" data-i18n="about.stat3">Digital — working from anywhere</div>
+            <div class="stat-value">Free</div>
+            <div class="stat-label" data-i18n="about.stat3">Mix feedback</div>
           </div>
           <div class="equip-block">
             <p class="equip-title" data-i18n="about.equip.label">Equipment</p>
@@ -1752,14 +1839,85 @@
     </div>
   </section>
 
+  <!-- ══════════════════════════════════════════════════════════════ PROCESS -->
+  <section id="process" class="section-divider">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="eyebrow" data-i18n="process.eyebrow">Process</p>
+        <h2 data-i18n="process.title">How it works</h2>
+      </div>
+      <div class="process-grid reveal">
+        <div class="process-step">
+          <div class="process-num">01</div>
+          <h3 data-i18n="process.s1.t">Send your mix</h3>
+          <p data-i18n="process.s1.p">Upload your files via WeTransfer, Dropbox or Google Drive and send me the link. I'll take care of the rest.</p>
+        </div>
+        <div class="process-step">
+          <div class="process-num">02</div>
+          <h3 data-i18n="process.s2.t">Get feedback</h3>
+          <p data-i18n="process.s2.p">Before anything else, you receive detailed notes on your mix — dynamics, balance, EQ. Completely free.</p>
+        </div>
+        <div class="process-step">
+          <div class="process-num">03</div>
+          <h3 data-i18n="process.s3.t">Mastering session</h3>
+          <p data-i18n="process.s3.p">I master your track with precision, targeting club and streaming standards without losing punch or dynamics.</p>
+        </div>
+        <div class="process-step">
+          <div class="process-num">04</div>
+          <h3 data-i18n="process.s4.t">Final delivery</h3>
+          <p data-i18n="process.s4.p">You receive your master files — WAV, MP3, vinyl version if needed — with 2 revisions included.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ══════════════════════════════════════════════════════════════ CONTACT -->
   <section id="contact" class="section-divider">
     <div class="container">
-      <div class="contact-centered reveal">
-        <p class="eyebrow" data-i18n="contact.eyebrow">Contact</p>
-        <h2 data-i18n="contact.title">Ready to work together?</h2>
-        <p data-i18n="contact.text">Send me your tracks and I'll get back to you quickly. I reply to every message within a reasonable timeframe and always respect agreed deadlines.</p>
-        <a href="mailto:onl.contact.off@gmail.com" class="btn-primary" data-i18n="contact.cta">Contact me</a>
+      <div class="contact-grid">
+        <div class="contact-left reveal">
+          <p class="eyebrow" data-i18n="contact.eyebrow">Contact</p>
+          <h2 data-i18n="contact.title">Ready to work together?</h2>
+          <p data-i18n="contact.text">Send me your tracks and I'll get back to you quickly. I reply to every message and always respect agreed deadlines.</p>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <!-- Pour activer l'envoi : créez un compte sur formspree.io,
+               remplacez XXXXXXXX par votre ID de formulaire -->
+          <form class="contact-form" id="contactForm"
+                action="https://formspree.io/f/xvzvdbby"
+                method="POST">
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="form.name">Name</label>
+                <input type="text" name="name" required placeholder="Artist / Label">
+              </div>
+              <div class="form-group">
+                <label data-i18n="form.email">Email</label>
+                <input type="email" name="email" required placeholder="you@example.com">
+              </div>
+            </div>
+            <div class="form-group">
+              <label data-i18n="form.service">Service</label>
+              <select name="service" required>
+                <option value="" data-i18n="form.service.placeholder">Select a service</option>
+                <option value="mastering" data-i18n="form.service.master">Digital Mastering</option>
+                <option value="vinyl" data-i18n="form.service.vinyl">Vinyl Pre-Master</option>
+                <option value="stems" data-i18n="form.service.stems">Stems Mastering</option>
+                <option value="mix" data-i18n="form.service.mix">Mixing</option>
+                <option value="mixmaster" data-i18n="form.service.mixmaster">Mix + Master</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label data-i18n="form.message">Message</label>
+              <textarea name="message" required placeholder="Tell me about your project…"></textarea>
+            </div>
+            <div class="form-submit">
+              <button type="submit" class="btn-primary" data-i18n="form.submit">Send message</button>
+            </div>
+            <p class="form-note" data-i18n="form.note">Or directly at <a href="mailto:onl.contact.off@gmail.com" style="color:var(--accent)">onl.contact.off@gmail.com</a></p>
+            <div class="form-success" id="formSuccess" data-i18n="form.success">Message sent — I'll get back to you shortly.</div>
+          </form>
+        </div>
       </div>
     </div>
   </section>
@@ -1815,13 +1973,12 @@
         'hero.stat2':'Years active',
         'hero.stat3':'Worldwide',
         'about.eyebrow':'About','about.title':'Jean-Charles Onillon',
-        'about.p1':"I'm Jean-Charles, a French mastering engineer. I began supporting artists and working on mastering in 2020 during the COVID pandemic. Since then, I've gained the trust of numerous artists and labels.",
-        'about.p2':"Over the past few years, I've mixed and mastered over <strong>3,000 tracks</strong>, offering extensive feedback and advice to help producers bring their projects to life.",
-        'about.p3':"While my primary focus is on <strong>techno and electronic music</strong>, I'm genuinely curious and open to all genres. I have a background as a DJ and have produced industrial techno, with my tracks played by Rebekah, Paula Temple, Nico Moreno, AnD and others.",
-        'about.p4':"Beyond the technical side, I enjoy talking with artists about production, mixing, DJing, and strategy. You don't just get a mastered track — you also get feedback, advice, and knowledge for your next projects.",
+        'about.p1':"I'm Jean-Charles, a mastering engineer based in Paris. I got into this in 2020 and it quickly became the thing I spend most of my time on.",
+        'about.p2':"Since then I've worked on over <strong>3,500 tracks</strong> across techno, electronic, industrial and beyond. I come from a DJ and production background, with tracks played by Rebekah, Paula Temple, Nico Moreno and AnD, so I understand what artists are trying to achieve before they even explain it.",
+        'about.p3':"What I care about is the conversation around the music, not just the technical result. Every project gets honest feedback, real advice, and a quick turnaround. I answer every message.",
         'about.played.label':'Tracks played by',
-        'about.stat1':'Tracks mixed &amp; mastered','about.stat2':'Active since',
-        'about.stat3':'Digital — working from anywhere',
+        'about.stat1':'Masters','about.stat2':'Active since',
+        'about.stat3':'Mix feedback',
         'about.equip.label':'Equipment',
         'eq.daw':'DAW','eq.hp':'Headphones','eq.pre':'Preamp','eq.plugins':'Plugins',
         'svc.eyebrow':'Services &amp; Pricing','svc.title':'What I offer',
@@ -1866,9 +2023,19 @@
         'px.4.t':'No Processing','px.4.p':'Remove all EQ, compression, reverb, and effects from each track. If an effect is essential (e.g. amp simulation), send both wet and dry versions. Keep peaks below <code>&minus;12 dB</code> on the master.',
         'px.5.t':'Additional Materials','px.5.p':'Provide a reference track or your own self-mix. Include session notes with specific instructions or creative directions for the mix.',
         'px.6.t':'File Transfer','px.6.p':'Name your folder <em>Artist Name &ndash; Track Name</em>, zip it, and upload it to WeTransfer, Dropbox, or Google Drive. Send the link to <code>onl.contact.off@gmail.com</code>.',
+        'process.eyebrow':'Process','process.title':'How it works',
+        'process.s1.t':'Send your mix','process.s1.p':"Upload your files via WeTransfer, Dropbox or Google Drive and send me the link. I'll take care of the rest.",
+        'process.s2.t':'Get feedback','process.s2.p':'Before anything else, you receive detailed notes on your mix — dynamics, balance, EQ. Completely free.',
+        'process.s3.t':'Mastering session','process.s3.p':'I master your track with precision, targeting club and streaming standards without losing punch or dynamics.',
+        'process.s4.t':'Final delivery','process.s4.p':'You receive your master files — WAV, MP3, vinyl version if needed — with 2 revisions included.',
         'contact.eyebrow':'Contact','contact.title':'Ready to work together?',
-        'contact.text':"Send me your tracks and I'll get back to you quickly. I reply to every message within a reasonable timeframe and always respect agreed deadlines.",
-        'contact.cta':'Contact me',
+        'contact.text':"Send me your tracks and I'll get back to you quickly. I reply to every message and always respect agreed deadlines.",
+        'form.name':'Name','form.email':'Email','form.service':'Service',
+        'form.service.placeholder':'Select a service',
+        'form.service.master':'Digital Mastering','form.service.vinyl':'Vinyl Pre-Master',
+        'form.service.stems':'Stems Mastering','form.service.mix':'Mixing','form.service.mixmaster':'Mix + Master',
+        'form.message':'Message','form.submit':'Send message',
+        'form.note':'Or directly at','form.success':'Message sent — I\'ll get back to you shortly.',
         'ci.email':'Email','ci.files':'Send files via','ci.payment':'Payment',
         'ci.payment.val':'Bank transfer &nbsp;&middot;&nbsp; Lydia &nbsp;&middot;&nbsp; PayPal',
         'ci.listen':'Listen to my work',
@@ -1884,13 +2051,12 @@
         'hero.stat2':'Ans d\'activité',
         'hero.stat3':'International',
         'about.eyebrow':'À propos','about.title':'Jean-Charles Onillon',
-        'about.p1':"Je suis Jean-Charles, ingénieur du son français spécialisé en mastering. J'ai commencé à accompagner des artistes en 2020, pendant la pandémie de COVID. Depuis, j'ai gagné la confiance de nombreux artistes et labels, ce dont je suis sincèrement reconnaissant.",
-        'about.p2':"Au fil des années, j'ai mixé et masterisé plus de <strong>3 000 titres</strong>, en offrant des retours détaillés et des conseils pour aider les producteurs à finaliser leurs projets.",
-        'about.p3':"Mon domaine de prédilection est la <strong>techno et la musique électronique</strong>, mais je suis ouvert à tous les genres. Je suis également DJ et j'ai produit de la techno industrielle, avec des titres joués par Rebekah, Paula Temple, Nico Moreno, AnD et d'autres.",
-        'about.p4':"Au-delà de l'aspect technique, j'aime discuter avec les artistes de production, de mixage, de DJing et de stratégie. Vous ne récupérez pas seulement un titre masterisé — vous recevez aussi des retours, des conseils et des connaissances utiles pour vos prochains projets.",
+        'about.p1':"Je suis Jean-Charles, ingénieur du son basé à Paris. Je me suis lancé dans le mastering en 2020 et c'est devenu ce sur quoi je passe la majorité de mon temps.",
+        'about.p2':"Depuis, j'ai travaillé sur plus de <strong>3 500 titres</strong> — techno, électronique, industrielle et plus encore. Je viens du DJing et de la production, avec des morceaux joués par Rebekah, Paula Temple, Nico Moreno et AnD. Je comprends ce que les artistes cherchent avant même qu'ils l'expriment.",
+        'about.p3':"Ce qui compte pour moi, c'est la discussion autour du projet, pas seulement le rendu technique. Chaque session vient avec des retours francs et de vrais conseils. Je réponds à tous les messages.",
         'about.played.label':'Titres joués par',
-        'about.stat1':'Titres mixés &amp; masterisés','about.stat2':'Actif depuis',
-        'about.stat3':'100% digital — travail depuis n\'importe où',
+        'about.stat1':'Masters','about.stat2':'Actif depuis',
+        'about.stat3':'Feedback mix',
         'about.equip.label':'Équipement',
         'eq.daw':'DAW','eq.hp':'Casques','eq.pre':'Préampli','eq.plugins':'Plugins',
         'svc.eyebrow':'Services &amp; Tarifs','svc.title':'Ce que je propose',
@@ -1916,7 +2082,7 @@
         'svc.pay.label':'Moyens de paiement',
         'svc.pay.methods':'Virement bancaire &nbsp;&middot;&nbsp; Lydia &nbsp;&middot;&nbsp; PayPal',
         'svc.pay.note':'Frais internationaux PayPal (5%) à la charge du client.<br>Tarifs susceptibles d\'évoluer au moment de la réservation. Mise à jour : 01.12.25',
-        'works.eyebrow':'Réalisations','works.title':'Quelques releases sur lesquelles j\'ai travaillé','works.hint':'← Faites glisser →',
+        'works.eyebrow':'Réalisations','works.title':'Quelques projets sur lesquels j\'ai travaillé','works.hint':'← Faites glisser →',
         'port.eyebrow':'Portfolio','port.title':'Écoutez mon travail',
         'port.sub':'Playlist · Extraits Mix &amp; Mastering',
         'port.sc_link':'Ouvrir sur SoundCloud',
@@ -1935,9 +2101,19 @@
         'px.4.t':'Pas de traitement','px.4.p':'Retirez tous les EQ, compresseurs, réverbes et effets des pistes individuelles. Si un effet est essentiel (ex. simulation d\'ampli), envoyez les versions wet et dry. Pics en dessous de <code>&minus;12 dB</code> sur le master.',
         'px.5.t':'Matériaux supplémentaires','px.5.p':'Fournissez un titre de référence ou votre propre auto-mix. Incluez des notes de session avec des instructions spécifiques ou des indications créatives pour le mix.',
         'px.6.t':'Transfert de fichiers','px.6.p':'Nommez votre dossier <em>Nom Artiste &ndash; Nom Titre</em>, compressez-le en ZIP, et envoyez-le via WeTransfer, Dropbox ou Google Drive. Partagez le lien à <code>onl.contact.off@gmail.com</code>.',
-        'contact.eyebrow':'Contact','contact.title':'Prêt à travailler ensemble ?',
-        'contact.text':"Envoyez-moi vos titres et je vous réponds rapidement. Je réponds à tous les messages dans un délai raisonnable et je respecte chaque deadline convenue.",
-        'contact.cta':'Me contacter',
+        'process.eyebrow':'Process','process.title':'Comment ça marche',
+        'process.s1.t':'Envoyez votre mix','process.s1.p':"Déposez vos fichiers via WeTransfer, Dropbox ou Google Drive et envoyez-moi le lien. Je m'occupe du reste.",
+        'process.s2.t':'Recevez un retour','process.s2.p':'Avant tout, vous recevez des notes détaillées sur votre mix — dynamique, balance, EQ. Complètement gratuit.',
+        'process.s3.t':'Session de mastering','process.s3.p':'Je masterise votre titre avec précision, en visant les standards club et streaming sans perdre le punch.',
+        'process.s4.t':'Livraison finale','process.s4.p':'Vous recevez vos fichiers master — WAV, MP3, version vinyle si besoin — avec 2 révisions incluses.',
+        'contact.eyebrow':'Contact','contact.title':'On travaille ensemble ?',
+        'contact.text':"Envoyez-moi vos titres, je réponds à tout le monde. Rapidement.",
+        'form.name':'Nom','form.email':'Email','form.service':'Prestation',
+        'form.service.placeholder':'Choisir une prestation',
+        'form.service.master':'Mastering digital','form.service.vinyl':'Pré-master vinyle',
+        'form.service.stems':'Mastering stems','form.service.mix':'Mixage','form.service.mixmaster':'Mix + Master',
+        'form.message':'Message','form.submit':'Envoyer',
+        'form.note':'Ou directement à','form.success':'Message envoyé — je vous réponds très vite.',
         'ci.email':'Email','ci.files':'Envoyer les fichiers via','ci.payment':'Paiement',
         'ci.payment.val':'Virement bancaire &nbsp;&middot;&nbsp; Lydia &nbsp;&middot;&nbsp; PayPal',
         'ci.listen':'Écouter mon travail',
@@ -1952,7 +2128,14 @@
       document.documentElement.lang = l;
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const v = T[l][el.dataset.i18n];
-        if (v !== undefined) el.innerHTML = v;
+        if (v !== undefined) {
+          /* Mettre à jour data-split-orig AVANT innerHTML
+             pour que splitH2 utilise la bonne langue si re-exécuté */
+          if (el.hasAttribute('data-split-orig')) {
+            el.setAttribute('data-split-orig', v);
+          }
+          el.innerHTML = v;
+        }
       });
       document.querySelectorAll('.lang-btn').forEach(b =>
         b.classList.toggle('active', b.dataset.lang === l)
@@ -2196,6 +2379,173 @@
         setTimeout(start, 300);
       }
     })();
+
+    /* ─── TOPOGRAPHIC HERO BACKGROUND ─────────────────────────────────────── */
+    (function () {
+      var canvas = document.getElementById('topoBg');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+
+      /* ── Minimal Perlin noise (2D) ── */
+      var perm = (function () {
+        var p = [];
+        for (var i = 0; i < 256; i++) p[i] = i;
+        for (var i = 255; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var tmp = p[i]; p[i] = p[j]; p[j] = tmp;
+        }
+        var out = [];
+        for (var i = 0; i < 512; i++) out[i] = p[i & 255];
+        return out;
+      })();
+
+      function fade(t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+      function lerp(a, b, t) { return a + t * (b - a); }
+      function grad(hash, x, y) {
+        var h = hash & 3;
+        var u = h < 2 ? x : y, v = h < 2 ? y : x;
+        return ((h & 1) ? -u : u) + ((h & 2) ? -v : v);
+      }
+      function noise(x, y) {
+        var X = Math.floor(x) & 255, Y = Math.floor(y) & 255;
+        x -= Math.floor(x); y -= Math.floor(y);
+        var u = fade(x), v = fade(y);
+        var a = perm[X] + Y, b = perm[X + 1] + Y;
+        return lerp(
+          lerp(grad(perm[a],     x,     y), grad(perm[b],     x - 1, y),     u),
+          lerp(grad(perm[a + 1], x,     y - 1), grad(perm[b + 1], x - 1, y - 1), u),
+          v
+        );
+      }
+      function fbm(x, y) {
+        return noise(x, y) * 0.5
+             + noise(x * 2.1, y * 2.1) * 0.25
+             + noise(x * 4.3, y * 4.3) * 0.125
+             + noise(x * 8.7, y * 8.7) * 0.0625;
+      }
+
+      var LEVELS   = 28;   /* nombre de courbes de niveau */
+      var SCALE    = 2.6;  /* densité du pattern */
+      var STEP     = 4;    /* pas de sampling en pixels */
+
+      function resize() {
+        canvas.width  = canvas.offsetWidth  || canvas.parentElement.offsetWidth  || 1200;
+        canvas.height = canvas.offsetHeight || canvas.parentElement.offsetHeight || 600;
+      }
+
+      function draw() {
+        var w = canvas.width, h = canvas.height;
+        if (!w || !h) return;
+        ctx.clearRect(0, 0, w, h);
+
+        /* Précalcul de la grille fbm */
+        var cols = Math.ceil(w / STEP) + 1;
+        var rows = Math.ceil(h / STEP) + 1;
+        var grid = new Float32Array(cols * rows);
+        for (var row = 0; row < rows; row++) {
+          for (var col = 0; col < cols; col++) {
+            var nx = (col / cols) * SCALE;
+            var ny = (row / rows) * SCALE;
+            grid[row * cols + col] = fbm(nx, ny);
+          }
+        }
+
+        /* Marching squares simplifié : on dessine les isolignes */
+        ctx.lineWidth = 0.7;
+        for (var lv = 0; lv < LEVELS; lv++) {
+          var threshold = -0.5 + (lv / LEVELS);
+          /* opacité plus forte pour les niveaux médians */
+          var t = Math.sin((lv / LEVELS) * Math.PI);
+          ctx.strokeStyle = 'rgba(180,170,140,' + (0.15 + t * 0.55) + ')';
+          ctx.beginPath();
+
+          for (var row = 0; row < rows - 1; row++) {
+            for (var col = 0; col < cols - 1; col++) {
+              var v00 = grid[row * cols + col];
+              var v10 = grid[row * cols + col + 1];
+              var v01 = grid[(row + 1) * cols + col];
+              var v11 = grid[(row + 1) * cols + col + 1];
+
+              /* Marching squares : 4 coins → case index */
+              var idx = 0;
+              if (v00 > threshold) idx |= 1;
+              if (v10 > threshold) idx |= 2;
+              if (v11 > threshold) idx |= 4;
+              if (v01 > threshold) idx |= 8;
+              if (idx === 0 || idx === 15) continue;
+
+              /* Interpolation linéaire des points sur les arêtes */
+              function interp(va, vb) {
+                return Math.max(0, Math.min(1, (threshold - va) / (vb - va)));
+              }
+              var x0 = col * STEP, x1 = (col + 1) * STEP;
+              var y0 = row * STEP, y1 = (row + 1) * STEP;
+
+              var eT = { x: x0 + interp(v00, v10) * STEP, y: y0 };
+              var eB = { x: x0 + interp(v01, v11) * STEP, y: y1 };
+              var eL = { x: x0, y: y0 + interp(v00, v01) * STEP };
+              var eR = { x: x1, y: y0 + interp(v10, v11) * STEP };
+
+              /* Tracer les segments selon la table marching squares */
+              var segs = [];
+              if (idx === 1 || idx === 14) segs = [[eT, eL]];
+              else if (idx === 2 || idx === 13) segs = [[eT, eR]];
+              else if (idx === 3 || idx === 12) segs = [[eL, eR]];
+              else if (idx === 4 || idx === 11) segs = [[eB, eR]];
+              else if (idx === 5)  segs = [[eT, eR], [eB, eL]];
+              else if (idx === 6 || idx === 9)  segs = [[eT, eB]];
+              else if (idx === 7 || idx === 8)  segs = [[eB, eL]];
+              else if (idx === 10) segs = [[eT, eL], [eB, eR]];
+
+              for (var s = 0; s < segs.length; s++) {
+                ctx.moveTo(segs[s][0].x, segs[s][0].y);
+                ctx.lineTo(segs[s][1].x, segs[s][1].y);
+              }
+            }
+          }
+          ctx.stroke();
+        }
+      }
+
+      function start() {
+        resize();
+        draw();
+      }
+
+      window.addEventListener('resize', function () { resize(); draw(); }, { passive: true });
+      if (document.readyState === 'complete') { start(); }
+      else { window.addEventListener('load', start); setTimeout(start, 200); }
+    })();
+
+    /* ─── CONTACT FORM ─────────────────────────────────────────────────────── */
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+      contactForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = contactForm.querySelector('[type="submit"]');
+        const success = document.getElementById('formSuccess');
+        btn.disabled = true;
+        btn.style.opacity = '0.6';
+        try {
+          const res = await fetch(contactForm.action, {
+            method: 'POST',
+            body: new FormData(contactForm),
+            headers: { 'Accept': 'application/json' }
+          });
+          if (res.ok) {
+            contactForm.reset();
+            success.style.display = 'block';
+            setTimeout(() => { success.style.display = 'none'; }, 5000);
+          } else {
+            window.location.href = 'mailto:onl.contact.off@gmail.com';
+          }
+        } catch {
+          window.location.href = 'mailto:onl.contact.off@gmail.com';
+        }
+        btn.disabled = false;
+        btn.style.opacity = '';
+      });
+    }
 
     /* ─── NAV SCROLL ───────────────────────────────────────────────────────── */
     const navbar = document.getElementById('navbar');
