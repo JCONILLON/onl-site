@@ -165,18 +165,21 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- ═══ Lenis Smooth Scroll ════════════════════════════════════════════════ -->
+
   <style>
 
     /* ─── VARIABLES ─────────────────────────────────────────────────────────── */
     :root {
-      --bg:           #080808;
-      --bg-card:      #1a1a1a;
-      --bg-card-2:    #202020;
+      --bg:           #0a0807;
+      --bg-card:      #181410;
+      --bg-card-2:    #1e1a15;
       --r:            12px;
-      --text:         #ffffff;
-      --text-muted:   #777777;
-      --text-dim:     #585858;
+      --text:         #f0ede8;
+      --text-muted:   #7a7370;
+      --text-dim:     #565250;
       --border:       rgba(255,255,255,0.07);
       --border-mid:   rgba(255,255,255,0.12);
       --accent:       #C07848;
@@ -192,7 +195,7 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: 16px;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
@@ -207,6 +210,7 @@
       font-weight: 600;
       line-height: 1.08;
       letter-spacing: -0.02em;
+      text-wrap: balance;
     }
     .eyebrow {
       font-family: 'Space Grotesk', sans-serif;
@@ -217,12 +221,13 @@
       color: var(--accent);
     }
     code {
-      font-family: 'Space Grotesk', monospace;
-      font-size: 0.82em;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 0.79em;
       background: var(--accent-dim);
-      padding: 1px 6px;
-      border-radius: 2px;
+      padding: 2px 7px;
+      border-radius: 3px;
       color: var(--accent);
+      letter-spacing: -0.01em;
     }
 
     /* ─── LAYOUT ─────────────────────────────────────────────────────────────── */
@@ -233,6 +238,18 @@
     }
     section { padding: var(--section-py) 0; }
     .section-divider { border-top: 1px solid var(--border); }
+    .section-fade-in {
+      position: relative;
+    }
+    .section-fade-in::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border-mid), transparent);
+    }
 
     /* ─── NAVIGATION ─────────────────────────────────────────────────────────── */
     #navbar {
@@ -279,8 +296,23 @@
       font-weight: 500;
       letter-spacing: 0.06em;
       transition: color 0.2s;
+      position: relative;
+      padding-bottom: 2px;
     }
-    .nav-links a:hover { color: var(--text); }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.25s ease;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-links a.nav-active { color: var(--accent); }
+    .nav-links a.nav-active::after { width: 100%; }
 
     /* Language toggle */
     .lang-toggle {
@@ -364,6 +396,28 @@
       padding-bottom: 64px;
       overflow: hidden;
     }
+    .hero-glow {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .hero-glow::before {
+      content: '';
+      position: absolute;
+      width: 55vw;
+      height: 55vw;
+      max-width: 800px;
+      max-height: 800px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(192,120,72,0.22) 0%, rgba(192,120,72,0.09) 35%, transparent 65%);
+      transform: translate(-50%, -50%);
+      left: var(--glow-x, 70%);
+      top: var(--glow-y, 50%);
+      transition: left 0.6s cubic-bezier(0.16, 1, 0.3, 1), top 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: left, top;
+    }
     #topoBg {
       position: absolute;
       inset: 0;
@@ -396,7 +450,7 @@
       line-height: 1;
       letter-spacing: -0.06em;
       color: transparent;
-      -webkit-text-stroke: 1px rgba(255,255,255,0.038);
+      -webkit-text-stroke: 1px rgba(192,120,72,0.07);
       pointer-events: none;
       user-select: none;
       z-index: 0;
@@ -490,6 +544,18 @@
       opacity: 0;
       animation: hero-bottom-in 0.8s cubic-bezier(0.16,1,0.3,1) 1.25s both;
     }
+    .hero-tagline {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(0.9rem, 1.4vw, 1.05rem);
+      font-weight: 400;
+      color: var(--text-dim);
+      letter-spacing: 0.01em;
+      line-height: 1.6;
+      max-width: 520px;
+      margin: 0 0 40px;
+      opacity: 0;
+      animation: hero-bottom-in 0.8s cubic-bezier(0.16,1,0.3,1) 1.0s both;
+    }
     .hero-service-label {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 0.65rem;
@@ -547,6 +613,8 @@
       will-change: transform;
     }
     .btn-outline:hover { border-color: var(--text); color: var(--text); }
+    .btn-outline-accent { border-color: var(--accent); color: var(--accent); }
+    .btn-outline-accent:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
 
     /* ─── SECTION HEADER ─────────────────────────────────────────────────────── */
     .section-header { margin-bottom: 60px; }
@@ -554,10 +622,14 @@
       font-size: clamp(2.2rem, 5vw, 3.8rem);
       margin-top: 10px;
       display: inline-block;
-      transform-origin: left center;
-      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .section-header h2:hover { transform: scale(1.05); }
+
+    /* Variations de taille et d'alignement */
+    .section-header--xl h2 { font-size: clamp(2.8rem, 6.5vw, 5.2rem); }
+    .section-header--lg h2 { font-size: clamp(2.5rem, 5.5vw, 4.4rem); }
+    .section-header--sm h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 500; }
+    .section-header--center { text-align: center; }
+    .section-header--center h2 { display: block; }
 
     /* ─── ABOUT ──────────────────────────────────────────────────────────────── */
     /* ─── SPECTRUM ANALYZER ─────────────────────────────────────────────── */
@@ -650,47 +722,128 @@
     /* ─── SERVICES ───────────────────────────────────────────────────────────── */
     .services-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2px;
+      grid-template-columns: 1fr 1.15fr 1fr;
+      gap: 10px;
       border-radius: var(--r);
-      overflow: hidden;
+      overflow: visible;
+      align-items: start;
     }
     .svc-col {
       background: var(--bg-card);
-      padding: 64px;
+      padding: 48px 44px 52px;
+      border-radius: var(--r);
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+      transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.32s ease;
+    }
+    .svc-col:hover {
+      transform: translateY(-14px) scale(1.02);
+      box-shadow: 0 28px 56px rgba(0,0,0,0.55);
+    }
+    .svc-col-featured {
+      background: var(--bg-card-2);
+      border: 1px solid rgba(192,120,72,0.28);
+      box-shadow: 0 4px 32px rgba(0,0,0,0.4), 0 0 48px rgba(192,120,72,0.07);
+      position: relative;
+      padding-top: 56px;
+    }
+    .svc-col-featured:hover {
+      transform: translateY(-14px) scale(1.02);
+      box-shadow: 0 32px 64px rgba(0,0,0,0.6), 0 0 80px rgba(192,120,72,0.15);
+    }
+    .svc-col-featured::before {
+      content: attr(data-badge);
+      position: absolute;
+      top: -13px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: #0a0807;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .svc-col-featured .svc-col-label { color: var(--accent); font-size: 1.6rem; }
+    .svc-col-desc {
+      font-size: 0.82rem;
+      color: rgba(192,120,72,0.65);
+      font-style: italic;
+      line-height: 1.55;
+      margin-top: 6px;
+      margin-bottom: 0;
+    }
+    .svc-col-header {
+      padding-bottom: 24px;
+      margin-bottom: 0;
+      border-bottom: 1px solid var(--border);
     }
     .svc-col-label {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 44px;
-      padding-bottom: 24px;
-      border-bottom: 1px solid var(--border);
+      font-size: 1.45rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      text-transform: none;
+      color: var(--text);
+      line-height: 1.2;
     }
-    .price-list { list-style: none; }
+    .price-list { list-style: none; margin-top: 24px; }
     .price-item {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
-      gap: 20px;
-      padding: 20px 0;
+      align-items: center;
+      gap: 16px;
+      padding: 15px 0;
       border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
     }
     .price-item:first-child { padding-top: 0; }
-    .price-item:last-child { border-bottom: none; }
-    .price-name { font-size: 1.02rem; font-weight: 400; color: var(--text); }
-    .price-sub { font-size: 0.79rem; color: var(--text-muted); margin-top: 4px; }
-    .price-val {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.05rem;
-      font-weight: 600;
+    .price-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .price-name {
+      font-size: 0.97rem;
+      font-weight: 500;
       color: var(--text);
-      white-space: nowrap;
+      line-height: 1.35;
     }
-    .price-free { color: var(--text-muted); font-weight: 400; }
+    .price-sub {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+    .price-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--accent);
+      white-space: nowrap;
+      flex-shrink: 0;
+      font-variant-numeric: tabular-nums;
+    }
+    .price-free {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+    .price-badge {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 2px 9px;
+      border-radius: 20px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid rgba(192,120,72,0.25);
+    }
 
     .svc-notes {
       margin-top: 28px;
@@ -700,8 +853,6 @@
       flex-direction: column;
       gap: 9px;
     }
-    .svc-note { font-size: 0.86rem; color: var(--text-muted); }
-    .svc-note strong { color: var(--text); font-weight: 500; }
 
     .svc-sub-label {
       font-family: 'Space Grotesk', sans-serif;
@@ -716,27 +867,42 @@
       border-bottom: 1px solid var(--border);
     }
 
-    /* Payment bar */
+    /* Details bar (discounts / revisions / delivery) */
     .payment-bar {
-      margin-top: 8px;
-      background: var(--bg-card-2);
-      border-radius: var(--r);
-      padding: 32px 64px;
+      margin-top: 32px;
+      padding: 32px 0 0;
+      border-top: 1px solid var(--border);
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 24px;
+      align-items: flex-start;
+      gap: 0;
     }
+    .svc-bar-item {
+      flex: 1;
+      padding: 0 40px;
+      border-left: 1px solid var(--border);
+    }
+    .svc-bar-item:first-child {
+      padding-left: 0;
+      border-left: none;
+    }
+    .payment-bar > .payment-note {
+      flex-shrink: 0;
+      padding-left: 40px;
+      border-left: 1px solid var(--border);
+      align-self: center;
+    }
+    .svc-note { font-size: 0.875rem; color: var(--text-muted); line-height: 1.75; }
+    .svc-note strong { color: var(--text); font-weight: 500; }
     .payment-bar-label {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.7rem;
-      letter-spacing: 0.15em;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 8px;
+      color: var(--accent);
+      margin-bottom: 10px;
+      opacity: 0.7;
     }
-    .payment-methods { font-size: 1rem; color: var(--text); }
-    .payment-note { font-size: 0.8rem; color: var(--text-muted); text-align: right; line-height: 1.7; }
+    .payment-note { font-size: 0.78rem; color: var(--text-muted); text-align: right; line-height: 1.75; }
 
     /* ─── MARQUEE ────────────────────────────────────────────────────────────── */
     .marquee-band {
@@ -772,6 +938,35 @@
     @keyframes marquee-scroll {
       from { transform: translateX(0); }
       to   { transform: translateX(-100%); }
+    }
+
+    /* ─── TRUSTED BY ─────────────────────────────────────────────────────────── */
+    .trusted-body {
+      margin-top: 56px;
+      display: flex;
+      flex-direction: column;
+      gap: 44px;
+      max-width: 900px;
+    }
+    .trusted-block {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+    }
+    .trusted-block-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .trusted-names {
+      font-size: 1.05rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      line-height: 2;
+      letter-spacing: 0.01em;
     }
 
     /* ─── WORKS SCROLL ───────────────────────────────────────────────────────── */
@@ -830,7 +1025,7 @@
       font-family: 'Space Grotesk', sans-serif;
       font-size: 0.9rem;
       font-weight: 600;
-      color: var(--text);
+      color: var(--accent);
       line-height: 1.3;
       letter-spacing: -0.01em;
       transform: translateY(10px);
@@ -1058,7 +1253,7 @@
       gap: 80px;
       align-items: start;
     }
-    .contact-left h2 { margin-bottom: 16px; }
+    .contact-left h2 { margin-bottom: 16px; font-size: clamp(2rem, 4.5vw, 3.2rem); }
     .contact-left p { color: var(--text-muted); line-height: 1.7; margin-bottom: 32px; }
     .contact-form {
       display: flex;
@@ -1074,6 +1269,9 @@
       text-transform: uppercase;
       color: var(--text-dim);
     }
+    .form-group {
+      position: relative;
+    }
     .form-group input,
     .form-group select,
     .form-group textarea {
@@ -1085,7 +1283,7 @@
       font-size: 0.9rem;
       font-family: inherit;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
       appearance: none;
       -webkit-appearance: none;
     }
@@ -1093,6 +1291,14 @@
     .form-group select:focus,
     .form-group textarea:focus {
       border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(192,120,72,0.12), 0 0 24px rgba(192,120,72,0.06);
+      background: rgba(24,20,16,0.85);
+    }
+    .form-group label {
+      transition: color 0.3s ease;
+    }
+    .form-group:focus-within label {
+      color: var(--accent);
     }
     .form-group textarea { resize: vertical; min-height: 120px; }
     .form-group select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23777' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
@@ -1118,7 +1324,7 @@
       display: inline-block;
       transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .contact-centered h2:hover { transform: scale(1.05); }
+    .contact-centered h2:hover { }
     .contact-centered p {
       color: var(--text-muted);
       font-size: 0.98rem;
@@ -1144,6 +1350,18 @@
       letter-spacing: 0.14em;
     }
     .footer-text { font-size: 0.75rem; color: var(--text-muted); }
+    .footer-legal {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-top: 6px;
+    }
+    .footer-legal a {
+      color: var(--text-dim);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 0.2s;
+    }
+    .footer-legal a:hover { color: var(--text-muted); }
     .footer-right { display: flex; align-items: center; gap: 20px; }
     .social-links { display: flex; align-items: center; gap: 20px; }
     .social-link {
@@ -1242,7 +1460,8 @@
     .services-grid > *:nth-child(1) { transition-delay: 0s; }
     .prep-panel > *:nth-child(2),
     .services-grid > *:nth-child(2) { transition-delay: 0.08s; }
-    .prep-panel > *:nth-child(3) { transition-delay: 0.16s; }
+    .prep-panel > *:nth-child(3),
+    .services-grid > *:nth-child(3) { transition-delay: 0.16s; }
     .prep-panel > *:nth-child(4) { transition-delay: 0.24s; }
     .prep-panel > *:nth-child(5) { transition-delay: 0.32s; }
     .prep-panel > *:nth-child(6) { transition-delay: 0.40s; }
@@ -1256,11 +1475,40 @@
       .nav-links { display: none; }
       .hamburger { display: flex; }
       .about-grid { grid-template-columns: 1fr; gap: 52px; }
-      .services-grid { grid-template-columns: 1fr; }
-      .svc-col { padding: 40px 32px; }
+      .services-grid { grid-template-columns: 1fr; gap: 8px; }
+      .svc-col { padding: 36px 28px; }
+      .svc-col-featured {
+        background: var(--bg-card-2);
+        border-color: rgba(192,120,72,0.28);
+        order: -1;
+        margin-top: 20px;
+      }
       .prep-card { padding: 36px 32px; }
-      .payment-bar { padding: 28px 32px; flex-direction: column; align-items: flex-start; }
-      .payment-note { text-align: left; }
+      .payment-bar {
+        flex-direction: column;
+        gap: 0;
+        padding-top: 24px;
+      }
+      .svc-bar-item {
+        padding: 20px 0;
+        border-left: none;
+        border-top: 1px solid var(--border);
+      }
+      .svc-bar-item:first-child {
+        padding-left: 0;
+        border-top: none;
+        border-left: none;
+        padding-top: 0;
+      }
+      .payment-bar > .payment-note {
+        padding-left: 0;
+        padding-top: 20px;
+        padding-bottom: 4px;
+        border-left: none;
+        border-top: 1px solid var(--border);
+        align-self: stretch;
+        text-align: left;
+      }
       .prep-panel.active { grid-template-columns: repeat(2, 1fr); }
     }
 
@@ -1281,9 +1529,110 @@
       .sc-embed iframe { height: 300px; }
     }
 
+
+    /* ─── PARALLAX ────────────────────────────────────────────────────────── */
+    [data-parallax].visible {
+      will-change: transform;
+    }
+
+    /* ─── SCROLL PROGRESS BAR ────────────────────────────────────────────── */
+    #scrollProgress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--accent);
+      transform-origin: left;
+      transform: scaleX(0);
+      z-index: 300;
+      pointer-events: none;
+    }
+
+    /* ─── BACK TO TOP ────────────────────────────────────────────────────── */
+    #backToTop {
+      position: fixed;
+      bottom: 36px;
+      right: 36px;
+      z-index: 200;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--border-mid);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(16px);
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1),
+                  border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
+    }
+    #backToTop.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    #backToTop:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+    #backToTop svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ─── REDUCED MOTION ─────────────────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      .st-word {
+        transform: none !important;
+      }
+      #scrollProgress {
+        display: none;
+      }
+      #backToTop {
+        opacity: 0;
+        transition: none;
+      }
+      #backToTop.visible {
+        opacity: 1;
+        transform: none;
+      }
+      .marquee-track {
+        animation: none !important;
+      }
+    }
+
   </style>
 </head>
 <body class="loading">
+
+  <!-- ═══════════════════════════════════════════════════════════ SCROLL PROGRESS -->
+  <div id="scrollProgress"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════════ BACK TO TOP -->
+  <button id="backToTop" aria-label="Retour en haut">
+    <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
 
   <!-- ═══════════════════════════════════════════════════════════════ LOADER -->
   <div id="loader" aria-hidden="true">
@@ -1301,6 +1650,7 @@
         <li><a href="#services"    data-i18n="nav.services">Services</a></li>
         <li><a href="#works"       data-i18n="nav.works">Works</a></li>
         <li><a href="#portfolio"   data-i18n="nav.portfolio">Portfolio</a></li>
+        <li><a href="#process"     data-i18n="nav.process">Process</a></li>
         <li><a href="#preparation" data-i18n="nav.prep">Preparation</a></li>
         <li><a href="#contact"     data-i18n="nav.contact">Contact</a></li>
       </ul>
@@ -1318,7 +1668,9 @@
   <div class="mobile-nav" id="mobileNav">
     <a href="#about"       class="mobile-link" data-i18n="nav.about">About</a>
     <a href="#services"    class="mobile-link" data-i18n="nav.services">Services</a>
+    <a href="#works"       class="mobile-link" data-i18n="nav.works">Works</a>
     <a href="#portfolio"   class="mobile-link" data-i18n="nav.portfolio">Portfolio</a>
+    <a href="#process"     class="mobile-link" data-i18n="nav.process">Process</a>
     <a href="#preparation" class="mobile-link" data-i18n="nav.prep">Preparation</a>
     <a href="#contact"     class="mobile-link" data-i18n="nav.contact">Contact</a>
     <div class="lang-toggle" style="margin-top: 8px;">
@@ -1330,11 +1682,14 @@
   <!-- ═══════════════════════════════════════════════════════════════ HERO -->
   <section id="hero">
 
+    <!-- Cursor-following glow -->
+    <div class="hero-glow" id="heroGlow" aria-hidden="true"></div>
+
     <!-- Topographic background canvas -->
     <canvas id="topoBg" aria-hidden="true"></canvas>
 
     <!-- Ghost background number -->
-    <div class="hero-bg-num" aria-hidden="true">3K</div>
+    <div class="hero-bg-num" aria-hidden="true">3.5K</div>
 
     <!-- Vertical side label -->
     <div class="hero-side-text" aria-hidden="true">Mastering</div>
@@ -1352,10 +1707,13 @@
       <!-- Animated rule -->
       <div class="hero-rule" id="heroRule"></div>
 
+      <!-- Tagline -->
+      <p class="hero-tagline" data-i18n="hero.tagline">Professional mastering for electronic music</p>
+
       <!-- Stats + CTA -->
       <div class="hero-bottom">
         <p class="hero-service-label" data-i18n="hero.sub">Mix &amp; Mastering</p>
-        <a href="mailto:onl.contact.off@gmail.com" class="btn-primary" data-i18n="hero.cta">Contact</a>
+        <a href="#contact" class="btn-primary" data-i18n="hero.cta">Contact</a>
       </div>
     </div>
 
@@ -1368,7 +1726,7 @@
       <span class="marquee-item">Electronic Music<span class="marquee-sep">·</span></span>
       <span class="marquee-item">Techno<span class="marquee-sep">·</span></span>
       <span class="marquee-item">Industrial<span class="marquee-sep">·</span></span>
-      <span class="marquee-item">3,000+ Tracks<span class="marquee-sep">·</span></span>
+      <span class="marquee-item">3,500+ Tracks<span class="marquee-sep">·</span></span>
       <span class="marquee-item">Vinyl Pre-Master<span class="marquee-sep">·</span></span>
       <span class="marquee-item">Stems Mastering<span class="marquee-sep">·</span></span>
       <span class="marquee-item">Worldwide<span class="marquee-sep">·</span></span>
@@ -1379,7 +1737,7 @@
       <span class="marquee-item">Electronic Music<span class="marquee-sep">·</span></span>
       <span class="marquee-item">Techno<span class="marquee-sep">·</span></span>
       <span class="marquee-item">Industrial<span class="marquee-sep">·</span></span>
-      <span class="marquee-item">3,000+ Tracks<span class="marquee-sep">·</span></span>
+      <span class="marquee-item">3,500+ Tracks<span class="marquee-sep">·</span></span>
       <span class="marquee-item">Vinyl Pre-Master<span class="marquee-sep">·</span></span>
       <span class="marquee-item">Stems Mastering<span class="marquee-sep">·</span></span>
       <span class="marquee-item">Worldwide<span class="marquee-sep">·</span></span>
@@ -1389,7 +1747,7 @@
 
   <!-- ══════════════════════════════════════════════════════════════ ABOUT -->
 
-  <section id="about" class="section-divider">
+  <section id="about" class="section-fade-in">
     <canvas id="spectrumBg" aria-hidden="true"></canvas>
     <div class="container">
       <div class="section-header reveal">
@@ -1397,13 +1755,10 @@
       </div>
       <div class="about-grid">
         <div class="about-bio reveal">
-          <p data-i18n="about.p1">I'm Jean-Charles, a mastering engineer based in Paris. I got into this in 2020 and it quickly became the thing I spend most of my time on.</p>
-          <p data-i18n="about.p2">Since then I've worked on over <strong>3,500 tracks</strong> across techno, electronic, industrial and beyond. I come from a DJ and production background, with tracks played by Rebekah, Paula Temple, Nico Moreno and AnD, so I understand what artists are trying to achieve before they even explain it.</p>
-          <p data-i18n="about.p3">What I care about is the conversation around the music, not just the technical result. Every project gets honest feedback, real advice, and a quick turnaround. I answer every message.</p>
-          <div class="about-played">
-            <p class="about-played-label" data-i18n="about.played.label">Tracks played by</p>
-            <p class="about-played-names">Rebekah &nbsp;·&nbsp; Paula Temple &nbsp;·&nbsp; Nico Moreno &nbsp;·&nbsp; AnD&hellip;</p>
-          </div>
+          <p data-i18n="about.p1">I'm Jean-Charles, a mastering engineer based in Paris.</p>
+          <p data-i18n="about.p2">Since 2020, I've worked on more than <strong>3,500 tracks</strong> in electronic music, ranging from techno to hard techno, as well as trance, industrial techno, and hardcore. Coming from a background in DJing and production, I pay close attention to artistic intent, the energy of a track, and how it translates across listening systems, from clubs to streaming platforms.</p>
+          <p data-i18n="about.p3">I see mastering as a decisive final stage. Beyond the technical aspect, it's about bringing coherence, precision, and an external perspective that can elevate a track without altering its identity.</p>
+          <p data-i18n="about.p4">Every project comes with direct communication, honest feedback, and precise advice. I'm personally involved in each session, with the same level of standards from the first message to the final result.</p>
         </div>
         <div class="about-meta reveal reveal-delay-1">
           <div class="stat-block">
@@ -1432,12 +1787,147 @@
     </div>
   </section>
 
-  <!-- ════════════════════════════════════════════════════════════════ WORKS -->
-  <section id="works" class="section-divider">
+  <!-- ═══════════════════════════════════════════════════════════ SERVICES -->
+  <section id="services" class="section-divider">
     <div class="container">
-      <div class="section-header reveal">
+      <div class="section-header section-header--xl reveal" data-parallax="-0.04">
+        <p class="eyebrow" data-i18n="svc.eyebrow">Services &amp; Pricing</p>
+        <h2 data-i18n="svc.title">What I offer</h2>
+      </div>
+    </div>
+    <div style="max-width: 1480px; margin: 0 auto; padding: 0 var(--pad-x);">
+      <div class="services-grid reveal">
+
+        <!-- MASTERING -->
+        <div class="svc-col">
+          <div class="svc-col-header">
+            <p class="svc-col-label" data-i18n="svc.m.label">Mastering</p>
+          </div>
+          <ul class="price-list">
+            <li class="price-item">
+              <div>
+                <p class="price-name" data-i18n="svc.m.digital">Digital Stereo Mastering</p>
+                <p class="price-sub"  data-i18n="svc.m.digital.sub">Tuned for digital releases &amp; club systems</p>
+                <span class="price-badge" data-i18n="svc.m.popular">Most popular</span>
+              </div>
+              <span class="price-val">&euro;50</span>
+            </li>
+            <li class="price-item">
+              <div>
+                <p class="price-name" data-i18n="svc.m.vinyl">Vinyl Pre-Master</p>
+                <p class="price-sub"  data-i18n="svc.m.vinyl.sub">Optimised for the lathe &amp; vinyl pressing</p>
+              </div>
+              <span class="price-val">&euro;60</span>
+            </li>
+            <li class="price-item">
+              <div>
+                <p class="price-name" data-i18n="svc.m.stems">Digital Stems Mastering</p>
+                <p class="price-sub"  data-i18n="svc.m.stems.sub">Up to 6 stems for deeper control on every element</p>
+              </div>
+              <span class="price-val">&euro;65</span>
+            </li>
+            <li class="price-item">
+              <div>
+                <p class="price-name" data-i18n="svc.m.pack">Pack: Digital + Vinyl Pre-Master</p>
+                <p class="price-sub"  data-i18n="svc.m.pack.sub">Two formats in one session: digital release + vinyl-ready master</p>
+              </div>
+              <span class="price-val">&euro;80</span>
+            </li>
+            <li class="price-item">
+              <div><p class="price-name" data-i18n="svc.m.feedback">Mix feedback before mastering</p></div>
+              <span class="price-val price-free" data-i18n="svc.free">Free</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- MIX + MASTER PACK (centre, mis en avant) -->
+        <div class="svc-col svc-col-featured" data-badge="Pack recommandé">
+          <div class="svc-col-header">
+            <p class="svc-col-label" data-i18n="svc.deal.label">Mix + Digital Master Pack</p>
+            <p class="svc-col-desc" data-i18n="svc.deal.desc">From raw multitracks to club-ready masters</p>
+          </div>
+          <ul class="price-list">
+            <li class="price-item">
+              <div><p class="price-name" data-i18n="svc.deal.s1">Up to 20 stems</p></div>
+              <span class="price-val">&euro;195</span>
+            </li>
+            <li class="price-item">
+              <div><p class="price-name" data-i18n="svc.deal.s2">20 to 50 stems</p></div>
+              <span class="price-val">&euro;255</span>
+            </li>
+            <li class="price-item">
+              <div><p class="price-name" data-i18n="svc.deal.s3">50+ stems</p></div>
+              <span class="price-val price-free" data-i18n="svc.on_request">On request</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- MIXING -->
+        <div class="svc-col">
+          <div class="svc-col-header">
+            <p class="svc-col-label" data-i18n="svc.x.label">Mixing</p>
+          </div>
+          <ul class="price-list">
+            <li class="price-item">
+              <div>
+                <p class="price-name" data-i18n="svc.x.stems20">Multitracks up to 20 stems</p>
+                <p class="price-sub"  data-i18n="svc.x.stems20.sub">Standard session, ideal for most electronic productions</p>
+              </div>
+              <span class="price-val">&euro;150</span>
+            </li>
+            <li class="price-item">
+              <div>
+                <p class="price-name" data-i18n="svc.x.stemsplus">Multitracks 20+ stems</p>
+                <p class="price-sub"  data-i18n="svc.x.stemsplus.sub">Extended session for layered or hybrid productions</p>
+              </div>
+              <span class="price-val">&euro;190</span>
+            </li>
+            <li class="price-item">
+              <div>
+                <p class="price-name" data-i18n="svc.x.video">Video of the mix session + explanations</p>
+                <p class="price-sub"  data-i18n="svc.x.video.sub">Commented session, private YouTube link</p>
+              </div>
+              <span class="price-val">&euro;50</span>
+            </li>
+            <li class="price-item">
+              <div>
+                <p class="price-name" data-i18n="svc.x.restoration">Audio Restoration / Editing / De-noise</p>
+                <p class="price-sub"  data-i18n="svc.x.restoration.sub">Podcast, vocal cleaning, click, hum, hiss and background noise</p>
+              </div>
+              <span class="price-val">&euro;50/hr</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Discounts / Revisions / Pricing note -->
+      <div class="payment-bar reveal">
+        <div class="svc-bar-item">
+          <p class="payment-bar-label" data-i18n="svc.disc.label">Discounts</p>
+          <p class="svc-note" data-i18n="svc.m.note1"><strong>5% discount</strong> for 4&ndash;7 tracks</p>
+          <p class="svc-note" data-i18n="svc.m.note2"><strong>10% discount</strong> for 8+ tracks</p>
+        </div>
+        <div class="svc-bar-item">
+          <p class="payment-bar-label" data-i18n="svc.rev.label">Revisions</p>
+          <p class="svc-note" data-i18n="svc.m.note3">Mastering: 2 free, additional <strong>&euro;15 each</strong></p>
+          <p class="svc-note" data-i18n="svc.x.note1">Mixing: 3 free, additional <strong>&euro;15 each</strong></p>
+        </div>
+        <div class="svc-bar-item">
+          <p class="payment-bar-label" data-i18n="svc.del.label">Delivery</p>
+          <p class="svc-note" data-i18n="svc.m.note4">Last-minute (&lt;5 days): <strong>+&euro;15 / track</strong></p>
+        </div>
+        <p class="payment-note" data-i18n="svc.pay.note2">Prices subject to change<br>at time of booking.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════════ WORKS -->
+  <section id="works">
+    <div class="container">
+      <div class="section-header section-header--lg section-header--center reveal">
         <p class="eyebrow" data-i18n="works.eyebrow">Selected Works</p>
-        <h2 data-i18n="works.title">Some of the releases I've worked on</h2>
+        <h2 data-i18n="works.title">References</h2>
       </div>
     </div>
     <div class="works-scroll-wrap reveal" id="worksScroll">
@@ -1460,9 +1950,9 @@
         </div>
 
         <div class="work-item">
-          <img src="images/mr-oizo.png" alt="Lambs Anger — Mr Oizo, O.N.L Warehouse Edit — Electronic Music Mastering">
+          <img src="images/mr-oizo.png" alt="Positif — Mr Oizo, O.N.L Warehouse Edit — Electronic Music Mastering">
           <div class="work-overlay">
-            <p class="work-title">Lambs Anger</p>
+            <p class="work-title">Positif</p>
             <p class="work-artist">Mr Oizo · O.N.L Warehouse Edit</p>
           </div>
         </div>
@@ -1508,10 +1998,10 @@
         </div>
 
         <div class="work-item">
-          <img src="images/a0886971549_10.jpg" alt="TAAPION — Mastered by O.N.L">
+          <img src="images/a0886971549_10.jpg" alt="Fresh Blood : Tome 8 — Various Artists — Mastered by O.N.L">
           <div class="work-overlay">
-            <p class="work-title">TAAPION</p>
-            <p class="work-artist">TAAPION</p>
+            <p class="work-title">Fresh Blood : Tome 8</p>
+            <p class="work-artist">Various Artists</p>
           </div>
         </div>
 
@@ -1532,10 +2022,10 @@
         </div>
 
         <div class="work-item">
-          <img src="images/a0821852558_10.jpg" alt="The End Is Never The End 5 Year Anniversary — Mastered by O.N.L">
+          <img src="images/a0821852558_10.jpg" alt="The End Is Never The End — Abr. — Mastered by O.N.L">
           <div class="work-overlay">
             <p class="work-title">The End Is Never The End</p>
-            <p class="work-artist">5 Year Anniversary</p>
+            <p class="work-artist">Abr.</p>
           </div>
         </div>
 
@@ -1556,26 +2046,26 @@
         </div>
 
         <div class="work-item">
-          <img src="images/artworks-RUuFdCdmAZ9Lg9qg-whpUOw-t500x500.jpg" alt="La Bamba — Mastered by O.N.L">
+          <img src="images/artworks-RUuFdCdmAZ9Lg9qg-whpUOw-t500x500.jpg" alt="La Bamba — Revex — Mastered by O.N.L">
           <div class="work-overlay">
             <p class="work-title">La Bamba</p>
-            <p class="work-artist"></p>
+            <p class="work-artist">Revex</p>
           </div>
         </div>
 
         <div class="work-item">
-          <img src="images/artworks-zr3DGeGkFFykjny8-xPoTsw-t500x500.jpeg" alt="Better Off Alone — Mastered by O.N.L">
+          <img src="images/artworks-zr3DGeGkFFykjny8-xPoTsw-t500x500.jpeg" alt="Better Off Alone — AIROD — Mastered by O.N.L">
           <div class="work-overlay">
             <p class="work-title">Better Off Alone</p>
-            <p class="work-artist"></p>
+            <p class="work-artist">AIROD</p>
           </div>
         </div>
 
         <div class="work-item">
-          <img src="images/Front.jpeg" alt="O.N.L Production — Jean-Charles Onillon Mastering Engineer">
+          <img src="images/Front.jpeg" alt="Chromes & Shells — O.N.L — Jean-Charles Onillon Mastering Engineer">
           <div class="work-overlay">
-            <p class="work-title">O.N.L</p>
-            <p class="work-artist">Original Production</p>
+            <p class="work-title">Chromes &amp; Shells</p>
+            <p class="work-artist">O.N.L</p>
           </div>
         </div>
 
@@ -1584,113 +2074,35 @@
     <p class="works-hint" data-i18n="works.hint">← Drag to scroll →</p>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════ SERVICES -->
-  <section id="services" class="section-divider">
+  <!-- ══════════════════════════════════════════════════════════ TRUSTED BY -->
+  <section id="trusted" class="section-divider">
     <div class="container">
-      <div class="section-header reveal">
-        <p class="eyebrow" data-i18n="svc.eyebrow">Services &amp; Pricing</p>
-        <h2 data-i18n="svc.title">What I offer</h2>
+      <div class="section-header section-header--sm reveal">
+        <h2 data-i18n="trusted.title">Trusted by</h2>
       </div>
-    </div>
-    <div style="max-width: 1480px; margin: 0 auto; padding: 0 var(--pad-x);">
-      <div class="services-grid reveal">
+      <div class="trusted-body reveal">
 
-        <!-- MASTERING -->
-        <div class="svc-col">
-          <p class="svc-col-label" data-i18n="svc.m.label">Mastering</p>
-          <ul class="price-list">
-            <li class="price-item">
-              <div><p class="price-name" data-i18n="svc.m.digital">Digital Stereo Mastering</p></div>
-              <span class="price-val">&euro;50</span>
-            </li>
-            <li class="price-item">
-              <div><p class="price-name" data-i18n="svc.m.vinyl">Vinyl Pre-Master</p></div>
-              <span class="price-val">&euro;60</span>
-            </li>
-            <li class="price-item">
-              <div>
-                <p class="price-name" data-i18n="svc.m.stems">Digital Stems Mastering</p>
-                <p class="price-sub"  data-i18n="svc.m.stems.sub">6 stems max</p>
-              </div>
-              <span class="price-val">&euro;65</span>
-            </li>
-            <li class="price-item">
-              <div><p class="price-name" data-i18n="svc.m.pack">Pack: Digital + Vinyl Pre-Master</p></div>
-              <span class="price-val">&euro;80</span>
-            </li>
-            <li class="price-item">
-              <div><p class="price-name" data-i18n="svc.m.feedback">Mix feedback before mastering</p></div>
-              <span class="price-val price-free" data-i18n="svc.free">Free</span>
-            </li>
-          </ul>
-          <div class="svc-notes">
-            <p class="svc-note" data-i18n="svc.m.note1"><strong>5% discount</strong> for 4–7 tracks</p>
-            <p class="svc-note" data-i18n="svc.m.note2"><strong>10% discount</strong> for 8+ tracks</p>
-            <p class="svc-note" data-i18n="svc.m.note3">2 free revisions &mdash; additional: <strong>&euro;15 each</strong></p>
-            <p class="svc-note" data-i18n="svc.m.note4">Last-minute delivery (&lt;5 days): <strong>+&euro;15 / track</strong></p>
+          <!-- Artists -->
+          <div class="trusted-block">
+            <p class="trusted-block-label" data-i18n="trusted.artists.label">Artists</p>
+            <p class="trusted-names">Nico Moreno, Vladimir Cauchemar, Todiefor, Nicolas Julian, DYEN, KRL MX, AIROD, Tassery, Abr., Noimage, OMAKS, Schlass, MATRAKK, Lola Cerise, Flymeon, AMRK, DJ Overclock, Pawlowski, Panel Junk, DION MAAS, Skryption&hellip;</p>
           </div>
-        </div>
 
-        <!-- MIXING -->
-        <div class="svc-col">
-          <p class="svc-col-label" data-i18n="svc.x.label">Mixing</p>
-          <ul class="price-list">
-            <li class="price-item">
-              <div><p class="price-name" data-i18n="svc.x.stems20">Multitracks up to 20 stems</p></div>
-              <span class="price-val">&euro;150</span>
-            </li>
-            <li class="price-item">
-              <div><p class="price-name" data-i18n="svc.x.stemsplus">Multitracks 20+ stems</p></div>
-              <span class="price-val">&euro;190</span>
-            </li>
-            <li class="price-item">
-              <div>
-                <p class="price-name" data-i18n="svc.x.video">Video of the mix session + explanations</p>
-                <p class="price-sub"  data-i18n="svc.x.video.sub">Private YouTube link</p>
-              </div>
-              <span class="price-val">&euro;50</span>
-            </li>
-            <li class="price-item">
-              <div><p class="price-name" data-i18n="svc.x.restoration">Audio Restoration / Editing / De-noise</p></div>
-              <span class="price-val">&euro;50/hr</span>
-            </li>
-          </ul>
-          <div class="svc-notes">
-            <p class="svc-note" data-i18n="svc.x.note1">3 free revisions &mdash; additional: <strong>&euro;15 each</strong></p>
+          <!-- Labels -->
+          <div class="trusted-block">
+            <p class="trusted-block-label" data-i18n="trusted.labels.label">Labels</p>
+            <p class="trusted-names">Insolent Rave Records, Comme dans les films, Black/Plague, Unfair Music, Kapitalist Dance Club, Mass London, Flagrance Records, Rave Alert Records, Dusk Records, Blur, Blackworks, Techno Germany, The Techno's Children, Sindex, COUP, MOTZ, Jaded London, The Finest Techno, Raw, Voight-Kampff, THE BRVTALIST, Normative, Maison Close Records&hellip;</p>
           </div>
-          <p class="svc-sub-label" data-i18n="svc.deal.label">Mix + Digital Master — Deal</p>
-          <ul class="price-list" style="margin-top: 14px;">
-            <li class="price-item">
-              <div><p class="price-name" data-i18n="svc.deal.s1">Up to 20 stems</p></div>
-              <span class="price-val">&euro;195</span>
-            </li>
-            <li class="price-item">
-              <div><p class="price-name" data-i18n="svc.deal.s2">20 to 50 stems</p></div>
-              <span class="price-val">&euro;255</span>
-            </li>
-            <li class="price-item">
-              <div><p class="price-name" data-i18n="svc.deal.s3">50+ stems</p></div>
-              <span class="price-val price-free" data-i18n="svc.on_request">On request</span>
-            </li>
-          </ul>
-        </div>
-      </div>
 
-      <!-- Payment bar -->
-      <div class="payment-bar reveal">
-        <div>
-          <p class="payment-bar-label" data-i18n="svc.pay.label">Payment methods</p>
-          <p class="payment-methods"   data-i18n="svc.pay.methods">Bank transfer &nbsp;&middot;&nbsp; Lydia &nbsp;&middot;&nbsp; PayPal</p>
-        </div>
-        <p class="payment-note" data-i18n="svc.pay.note">PayPal international fees (5%) covered by clients.<br>Prices subject to change at time of booking. Last update: 01.12.25</p>
       </div>
     </div>
   </section>
 
   <!-- ══════════════════════════════════════════════════════════ PORTFOLIO -->
-  <section id="portfolio" class="section-divider">
+  <!-- ══════════════════════════════════════════════════════════ PORTFOLIO -->
+  <section id="portfolio">
     <div class="container">
-      <div class="section-header reveal">
+      <div class="section-header section-header--center reveal">
         <p class="eyebrow" data-i18n="port.eyebrow">Portfolio</p>
         <h2 data-i18n="port.title">Listen to my work</h2>
       </div>
@@ -1700,11 +2112,10 @@
         <div class="sc-card-header">
           <div class="sc-card-meta">
             <p class="sc-card-title">Mastering by O.N.L</p>
-            <p class="sc-card-sub" data-i18n="port.sub">Playlist · Mix &amp; Mastering samples</p>
           </div>
           <a href="https://soundcloud.com/onl-onl/sets/mastering-by-o-n-l"
              target="_blank" rel="noopener"
-             class="btn-outline" data-i18n="port.sc_link">Open on SoundCloud</a>
+             class="btn-outline btn-outline-accent" data-i18n="port.sc_link">Open on SoundCloud</a>
         </div>
         <iframe
           scrolling="no"
@@ -1715,8 +2126,40 @@
     </div>
   </section>
 
+  <!-- ══════════════════════════════════════════════════════════════ PROCESS -->
+  <section id="process" class="section-divider">
+    <div class="container">
+      <div class="section-header section-header--sm reveal">
+        <p class="eyebrow" data-i18n="process.eyebrow">Process</p>
+        <h2 data-i18n="process.title">How it works</h2>
+      </div>
+      <div class="process-grid reveal">
+        <div class="process-step">
+          <div class="process-num">01</div>
+          <h3 data-i18n="process.s1.t">Send your mix</h3>
+          <p data-i18n="process.s1.p">Upload your files via WeTransfer, Dropbox or Google Drive and send me the link. I'll take care of the rest.</p>
+        </div>
+        <div class="process-step">
+          <div class="process-num">02</div>
+          <h3 data-i18n="process.s2.t">Get feedback</h3>
+          <p data-i18n="process.s2.p">Before anything else, you receive detailed notes on your mix: dynamics, balance, EQ. Completely free.</p>
+        </div>
+        <div class="process-step">
+          <div class="process-num">03</div>
+          <h3 data-i18n="process.s3.t">Mastering session</h3>
+          <p data-i18n="process.s3.p">I master your track with precision, targeting club and streaming standards without losing punch or dynamics.</p>
+        </div>
+        <div class="process-step">
+          <div class="process-num">04</div>
+          <h3 data-i18n="process.s4.t">Final delivery</h3>
+          <p data-i18n="process.s4.p">You receive your master files (WAV, MP3, vinyl version if needed) with 2 revisions included.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ══════════════════════════════════════════════════════════ PREPARATION -->
-  <section id="preparation" class="section-divider">
+  <section id="preparation">
     <div class="container">
       <div class="section-header reveal">
         <p class="eyebrow" data-i18n="prep.eyebrow">Technical Guidelines</p>
@@ -1746,7 +2189,7 @@
             <svg class="prep-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="14" width="3" height="7" rx="1"/><rect x="8.5" y="10" width="3" height="11" rx="1"/><rect x="14" y="6" width="3" height="15" rx="1"/><rect x="19.5" y="11" width="3" height="10" rx="1"/><line x1="1" y1="9" x2="23" y2="9" stroke-dasharray="2 2" stroke-width="1"/></svg>
             <p class="prep-num">02</p>
             <h3 data-i18n="pm.2.t">Headroom</h3>
-            <p  data-i18n="pm.2.p">Keep your master bus below <code>0 dBTP</code>. Aim for peaks around <code>&minus;6 dBTP</code>. Do not use a limiter to fix clipping — lower all tracks collectively instead.</p>
+            <p  data-i18n="pm.2.p">Keep your master bus below <code>0 dBTP</code>. Aim for peaks around <code>&minus;6 dBTP</code>. Do not use a limiter to fix clipping. Lower all tracks collectively instead.</p>
           </div>
 
           <!-- 03 Dynamic Control — forme d'onde compressée -->
@@ -1839,43 +2282,12 @@
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════════════════════════════ PROCESS -->
-  <section id="process" class="section-divider">
-    <div class="container">
-      <div class="section-header reveal">
-        <p class="eyebrow" data-i18n="process.eyebrow">Process</p>
-        <h2 data-i18n="process.title">How it works</h2>
-      </div>
-      <div class="process-grid reveal">
-        <div class="process-step">
-          <div class="process-num">01</div>
-          <h3 data-i18n="process.s1.t">Send your mix</h3>
-          <p data-i18n="process.s1.p">Upload your files via WeTransfer, Dropbox or Google Drive and send me the link. I'll take care of the rest.</p>
-        </div>
-        <div class="process-step">
-          <div class="process-num">02</div>
-          <h3 data-i18n="process.s2.t">Get feedback</h3>
-          <p data-i18n="process.s2.p">Before anything else, you receive detailed notes on your mix — dynamics, balance, EQ. Completely free.</p>
-        </div>
-        <div class="process-step">
-          <div class="process-num">03</div>
-          <h3 data-i18n="process.s3.t">Mastering session</h3>
-          <p data-i18n="process.s3.p">I master your track with precision, targeting club and streaming standards without losing punch or dynamics.</p>
-        </div>
-        <div class="process-step">
-          <div class="process-num">04</div>
-          <h3 data-i18n="process.s4.t">Final delivery</h3>
-          <p data-i18n="process.s4.p">You receive your master files — WAV, MP3, vinyl version if needed — with 2 revisions included.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ══════════════════════════════════════════════════════════════ CONTACT -->
-  <section id="contact" class="section-divider">
+  <section id="contact" class="section-divider" style="position:relative;overflow:hidden;">
+    <div class="hero-glow contact-glow" id="contactGlow" aria-hidden="true"></div>
     <div class="container">
       <div class="contact-grid">
-        <div class="contact-left reveal">
+        <div class="contact-left reveal" data-parallax="0.05">
           <p class="eyebrow" data-i18n="contact.eyebrow">Contact</p>
           <h2 data-i18n="contact.title">Ready to work together?</h2>
           <p data-i18n="contact.text">Send me your tracks and I'll get back to you quickly. I reply to every message and always respect agreed deadlines.</p>
@@ -1915,7 +2327,7 @@
               <button type="submit" class="btn-primary" data-i18n="form.submit">Send message</button>
             </div>
             <p class="form-note" data-i18n="form.note">Or directly at <a href="mailto:onl.contact.off@gmail.com" style="color:var(--accent)">onl.contact.off@gmail.com</a></p>
-            <div class="form-success" id="formSuccess" data-i18n="form.success">Message sent — I'll get back to you shortly.</div>
+            <div class="form-success" id="formSuccess" data-i18n="form.success">Message sent. I'll get back to you shortly.</div>
           </form>
         </div>
       </div>
@@ -1926,7 +2338,11 @@
   <footer>
     <div class="container">
       <div class="footer-inner">
-        <span class="footer-text" data-i18n="footer.text">&copy; 2025 Jean-Charles Onillon &mdash; Mix &amp; Mastering</span>
+        <div>
+          <span class="footer-text" data-i18n="footer.text">&copy; 2026 Jean-Charles Onillon &mdash; Mix &amp; Mastering</span>
+          <p class="footer-legal" data-i18n="footer.legal">Your contact data is processed via <a href="https://formspree.io/legal/privacy-policy" target="_blank" rel="noopener">Formspree</a> solely for the purpose of responding to your request. No data is stored or sold.</p>
+          <p class="footer-legal" style="margin-top:6px;"><a href="mentions-legales.html" data-i18n="footer.mentions">Mentions légales &amp; Confidentialité</a></p>
+        </div>
         <div class="footer-right">
           <div class="social-links">
 
@@ -1960,12 +2376,15 @@
 
   <!-- ══════════════════════════════════════════════════════════════ SCRIPTS -->
   <script>
+  (function() {
+
+    var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     /* ─── TRANSLATIONS ─────────────────────────────────────────────────────── */
     const T = {
       en: {
-        'nav.about':'About','nav.services':'Services','nav.works':'Works','nav.portfolio':'Portfolio',
-        'nav.prep':'Preparation','nav.contact':'Contact',
+        'nav.about':'About','nav.services':'Services','nav.works':'Works','nav.process':'Process',
+        'nav.portfolio':'Portfolio','nav.prep':'Preparation','nav.contact':'Contact',
         'hero.sub':'Mix &amp; Mastering',
         'hero.tagline':'Professional mastering for electronic music',
         'hero.cta':'Contact',
@@ -1973,38 +2392,53 @@
         'hero.stat2':'Years active',
         'hero.stat3':'Worldwide',
         'about.eyebrow':'About','about.title':'Jean-Charles Onillon',
-        'about.p1':"I'm Jean-Charles, a mastering engineer based in Paris. I got into this in 2020 and it quickly became the thing I spend most of my time on.",
-        'about.p2':"Since then I've worked on over <strong>3,500 tracks</strong> across techno, electronic, industrial and beyond. I come from a DJ and production background, with tracks played by Rebekah, Paula Temple, Nico Moreno and AnD, so I understand what artists are trying to achieve before they even explain it.",
-        'about.p3':"What I care about is the conversation around the music, not just the technical result. Every project gets honest feedback, real advice, and a quick turnaround. I answer every message.",
+        'about.p1':"I'm Jean-Charles, a mastering engineer based in Paris.",
+        'about.p2':"Since 2020, I've worked on more than <strong>3,500 tracks</strong> in electronic music, ranging from techno to hard techno, as well as trance, industrial techno, and hardcore. Coming from a background in DJing and production, I pay close attention to artistic intent, the energy of a track, and how it translates across listening systems, from clubs to streaming platforms.",
+        'about.p3':"I see mastering as a decisive final stage. Beyond the technical aspect, it's about bringing coherence, precision, and an external perspective that can elevate a track without altering its identity.",
+        'about.p4':"Every project comes with direct communication, honest feedback, and precise advice. I'm personally involved in each session, with the same level of standards from the first message to the final result.",
         'about.played.label':'Tracks played by',
         'about.stat1':'Masters','about.stat2':'Active since',
         'about.stat3':'Mix feedback',
         'about.equip.label':'Equipment',
         'eq.daw':'DAW','eq.hp':'Headphones','eq.pre':'Preamp','eq.plugins':'Plugins',
         'svc.eyebrow':'Services &amp; Pricing','svc.title':'What I offer',
+        'svc.tagline':'From raw multitracks to club-ready masters',
         'svc.from':'from','svc.per':'/ per track','svc.cta':'Book a session',
         'svc.deal.badge':'Mix + Master Deal',
-        'svc.m.label':'Mastering','svc.m.digital':'Digital Stereo Mastering',
-        'svc.m.vinyl':'Vinyl Pre-Master','svc.m.stems':'Digital Stems Mastering',
-        'svc.m.stems.sub':'6 stems max','svc.m.pack':'Pack: Digital + Vinyl Pre-Master',
+        'svc.m.label':'Mastering','svc.m.digital':'Digital Stereo Mastering','svc.m.popular':'Most popular',
+        'svc.m.digital.sub':'Tuned for digital releases &amp; club systems',
+        'svc.m.vinyl':'Vinyl Pre-Master',
+        'svc.m.vinyl.sub':'Optimised for the lathe &amp; vinyl pressing',
+        'svc.m.stems':'Digital Stems Mastering',
+        'svc.m.stems.sub':'Up to 6 stems for deeper control on every element',
+        'svc.m.pack':'Pack: Digital + Vinyl Pre-Master',
+        'svc.m.pack.sub':'Two formats in one session: digital release + vinyl-ready master',
         'svc.m.feedback':'Mix feedback before mastering','svc.free':'Free',
-        'svc.m.note1':'<strong>5% discount</strong> for 4–7 tracks',
+        'svc.m.note1':'<strong>5% discount</strong> for 4&ndash;7 tracks',
         'svc.m.note2':'<strong>10% discount</strong> for 8+ tracks',
-        'svc.m.note3':'2 free revisions &mdash; additional: <strong>&euro;15 each</strong>',
-        'svc.m.note4':'Last-minute delivery (&lt;5 days): <strong>+&euro;15 / track</strong>',
+        'svc.m.note3':'Mastering: 2 free, additional <strong>&euro;15 each</strong>',
+        'svc.m.note4':'Last-minute (&lt;5 days): <strong>+&euro;15 / track</strong>',
         'svc.x.label':'Mixing','svc.x.stems20':'Multitracks up to 20 stems',
+        'svc.x.stems20.sub':'Standard session, ideal for most electronic productions',
         'svc.x.stemsplus':'Multitracks 20+ stems',
+        'svc.x.stemsplus.sub':'Extended session for layered or hybrid productions',
         'svc.x.video':'Video of the mix session + explanations',
-        'svc.x.video.sub':'Private YouTube link',
+        'svc.x.video.sub':'Commented session, private YouTube link',
         'svc.x.restoration':'Audio Restoration / Editing / De-noise',
-        'svc.x.note1':'3 free revisions &mdash; additional: <strong>&euro;15 each</strong>',
-        'svc.deal.label':'Mix + Digital Master — Deal',
+        'svc.x.restoration.sub':'Podcast, vocal cleaning, click, hum, hiss and background noise',
+        'svc.x.note1':'Mixing: 3 free, additional <strong>&euro;15 each</strong>',
+        'svc.disc.label':'Discounts','svc.rev.label':'Revisions','svc.del.label':'Delivery',
+        'svc.pay.note2':'Prices subject to change<br>at time of booking.',
+        'svc.deal.label':'Mix + Digital Master Pack',
+        'svc.deal.desc':'From raw multitracks to club-ready masters',
         'svc.deal.s1':'Up to 20 stems','svc.deal.s2':'20 to 50 stems',
         'svc.deal.s3':'50+ stems','svc.on_request':'On request',
         'svc.pay.label':'Payment methods',
         'svc.pay.methods':'Bank transfer &nbsp;&middot;&nbsp; Lydia &nbsp;&middot;&nbsp; PayPal',
         'svc.pay.note':'PayPal international fees (5%) covered by clients.<br>Prices subject to change at time of booking. Last update: 01.12.25',
-        'works.eyebrow':'Selected Works','works.title':"Some of the releases I've worked on",'works.hint':'← Drag to scroll →',
+        'trusted.eyebrow':'Clients','trusted.title':'Trusted by',
+        'trusted.artists.label':'Artists','trusted.labels.label':'Labels',
+        'works.eyebrow':'Selected Works','works.title':'References','works.hint':'← Drag to scroll →',
         'port.eyebrow':'Portfolio','port.title':'Listen to my work',
         'port.sub':'Playlist · Mix &amp; Mastering samples',
         'port.sc_link':'Open on SoundCloud',
@@ -2012,7 +2446,7 @@
         'prep.title':'How to prepare your track',
         'prep.tab.m':'For Mastering','prep.tab.x':'For Mixing',
         'pm.1.t':'File Format','pm.1.p':'Export as <code>WAV</code> or <code>AIFF</code>, <code>24-bit</code> or <code>32-bit</code>, at <code>44.1 kHz</code> or higher. Normalize: <code>Off</code>. Dither: <code>Off</code>.',
-        'pm.2.t':'Headroom','pm.2.p':'Keep your master bus below <code>0 dBTP</code>. Aim for peaks around <code>&minus;6 dBTP</code>. Do not use a limiter to fix clipping — lower all tracks collectively instead.',
+        'pm.2.t':'Headroom','pm.2.p':'Keep your master bus below <code>0 dBTP</code>. Aim for peaks around <code>&minus;6 dBTP</code>. Do not use a limiter to fix clipping. Lower all tracks collectively instead.',
         'pm.3.t':'Dynamic Control','pm.3.p':'Avoid over-compressing your mix. A well-controlled dynamic range gives mastering more room to work, resulting in a punchier, more impactful sound.',
         'pm.4.t':'Beginning &amp; End','pm.4.p':'Leave at least <code>100 ms</code> of silence at the start and <code>2 seconds</code> at the end. This preserves transients and reverb tails during mastering.',
         'pm.5.t':'No Mixbus Processing','pm.5.p':'Remove all compressors, EQs, stereo wideners, and limiters from the master channel. A clean signal allows for the most effective mastering process.',
@@ -2025,9 +2459,9 @@
         'px.6.t':'File Transfer','px.6.p':'Name your folder <em>Artist Name &ndash; Track Name</em>, zip it, and upload it to WeTransfer, Dropbox, or Google Drive. Send the link to <code>onl.contact.off@gmail.com</code>.',
         'process.eyebrow':'Process','process.title':'How it works',
         'process.s1.t':'Send your mix','process.s1.p':"Upload your files via WeTransfer, Dropbox or Google Drive and send me the link. I'll take care of the rest.",
-        'process.s2.t':'Get feedback','process.s2.p':'Before anything else, you receive detailed notes on your mix — dynamics, balance, EQ. Completely free.',
+        'process.s2.t':'Get feedback','process.s2.p':'Before anything else, you receive detailed notes on your mix: dynamics, balance, EQ. Completely free.',
         'process.s3.t':'Mastering session','process.s3.p':'I master your track with precision, targeting club and streaming standards without losing punch or dynamics.',
-        'process.s4.t':'Final delivery','process.s4.p':'You receive your master files — WAV, MP3, vinyl version if needed — with 2 revisions included.',
+        'process.s4.t':'Final delivery','process.s4.p':'You receive your master files (WAV, MP3, vinyl version if needed) with 2 revisions included.',
         'contact.eyebrow':'Contact','contact.title':'Ready to work together?',
         'contact.text':"Send me your tracks and I'll get back to you quickly. I reply to every message and always respect agreed deadlines.",
         'form.name':'Name','form.email':'Email','form.service':'Service',
@@ -2035,15 +2469,17 @@
         'form.service.master':'Digital Mastering','form.service.vinyl':'Vinyl Pre-Master',
         'form.service.stems':'Stems Mastering','form.service.mix':'Mixing','form.service.mixmaster':'Mix + Master',
         'form.message':'Message','form.submit':'Send message',
-        'form.note':'Or directly at','form.success':'Message sent — I\'ll get back to you shortly.',
+        'form.note':'Or directly at <a href="mailto:onl.contact.off@gmail.com" style="color:var(--accent)">onl.contact.off@gmail.com</a>','form.success':'Message sent. I\'ll get back to you shortly.',
         'ci.email':'Email','ci.files':'Send files via','ci.payment':'Payment',
         'ci.payment.val':'Bank transfer &nbsp;&middot;&nbsp; Lydia &nbsp;&middot;&nbsp; PayPal',
         'ci.listen':'Listen to my work',
-        'footer.text':'&copy; 2025 Jean-Charles Onillon &mdash; Mix &amp; Mastering',
+        'footer.text':'&copy; 2026 Jean-Charles Onillon &mdash; Mix &amp; Mastering',
+        'footer.legal':'Your contact data is processed via <a href="https://formspree.io/legal/privacy-policy" target="_blank" rel="noopener">Formspree</a> solely for the purpose of responding to your request. No data is stored or sold.',
+        'footer.mentions':'Legal notice &amp; Privacy',
       },
       fr: {
-        'nav.about':'À propos','nav.services':'Services','nav.works':'Works','nav.portfolio':'Portfolio',
-        'nav.prep':'Préparation','nav.contact':'Contact',
+        'nav.about':'À propos','nav.services':'Services','nav.works':'Works','nav.process':'Processus',
+        'nav.portfolio':'Portfolio','nav.prep':'Préparation','nav.contact':'Contact',
         'hero.sub':'Mix &amp; Mastering',
         'hero.tagline':'Mastering professionnel pour la musique électronique',
         'hero.cta':'Contacter',
@@ -2051,46 +2487,61 @@
         'hero.stat2':'Ans d\'activité',
         'hero.stat3':'International',
         'about.eyebrow':'À propos','about.title':'Jean-Charles Onillon',
-        'about.p1':"Je suis Jean-Charles, ingénieur du son basé à Paris. Je me suis lancé dans le mastering en 2020 et c'est devenu ce sur quoi je passe la majorité de mon temps.",
-        'about.p2':"Depuis, j'ai travaillé sur plus de <strong>3 500 titres</strong> — techno, électronique, industrielle et plus encore. Je viens du DJing et de la production, avec des morceaux joués par Rebekah, Paula Temple, Nico Moreno et AnD. Je comprends ce que les artistes cherchent avant même qu'ils l'expriment.",
-        'about.p3':"Ce qui compte pour moi, c'est la discussion autour du projet, pas seulement le rendu technique. Chaque session vient avec des retours francs et de vrais conseils. Je réponds à tous les messages.",
+        'about.p1':"Je suis Jean-Charles, ingénieur du son basé à Paris, spécialisé dans le mastering.",
+        'about.p2':"Depuis 2020, j'ai travaillé sur plus de <strong>3 500 titres</strong> dans les musiques électroniques, de la techno à la hard techno, en passant par la trance, la techno industrielle et le hardcore. Issu du DJing et de la production, j'accorde une attention particulière à l'intention artistique, à l'énergie d'un morceau et à sa traduction sur les systèmes d'écoute, du club aux plateformes.",
+        'about.p3':"Je considère le mastering comme une étape décisive. Au-delà de l'aspect technique, il s'agit d'apporter de la cohérence, de la précision et une vision extérieure capable d'élever un morceau sans en altérer l'identité.",
+        'about.p4':"Chaque projet s'accompagne d'un échange direct, de retours honnêtes et de conseils précis. Je m'implique personnellement dans chaque session, avec le même niveau d'exigence, du premier message jusqu'au rendu final.",
         'about.played.label':'Titres joués par',
         'about.stat1':'Masters','about.stat2':'Actif depuis',
         'about.stat3':'Feedback mix',
         'about.equip.label':'Équipement',
         'eq.daw':'DAW','eq.hp':'Casques','eq.pre':'Préampli','eq.plugins':'Plugins',
-        'svc.eyebrow':'Services &amp; Tarifs','svc.title':'Ce que je propose',
+        'svc.eyebrow':'Services &amp; Tarifs','svc.title':'Services',
+        'svc.tagline':'Du multitrack brut au master prêt pour la scène',
         'svc.from':'à partir de','svc.per':'/ par track','svc.cta':'Réserver une session',
         'svc.deal.badge':'Deal Mix + Master',
-        'svc.m.label':'Mastering','svc.m.digital':'Mastering stéréo digital',
-        'svc.m.vinyl':'Pré-master vinyle','svc.m.stems':'Mastering stems digital',
-        'svc.m.stems.sub':'6 stems max','svc.m.pack':'Pack : Digital + Pré-master vinyle',
+        'svc.m.label':'Mastering','svc.m.digital':'Mastering stéréo digital','svc.m.popular':'Le plus populaire',
+        'svc.m.digital.sub':'Optimisé pour les sorties digitales &amp; les sound systems',
+        'svc.m.vinyl':'Pré-master vinyle',
+        'svc.m.vinyl.sub':'Optimisé pour la tête de lecture &amp; la gravure vinyle',
+        'svc.m.stems':'Mastering stems digital',
+        'svc.m.stems.sub':'Jusqu\'à 6 stems pour un contrôle plus précis sur chaque élément',
+        'svc.m.pack':'Pack : Digital + Pré-master vinyle',
+        'svc.m.pack.sub':'Deux formats en une session : sortie digitale + master prêt pour la gravure',
         'svc.m.feedback':'Retour sur le mix avant mastering','svc.free':'Gratuit',
         'svc.m.note1':'<strong>5% de réduction</strong> pour 4 à 7 titres',
         'svc.m.note2':'<strong>10% de réduction</strong> pour 8 titres et plus',
-        'svc.m.note3':'2 révisions offertes &mdash; supplémentaires : <strong>15&euro; chacune</strong>',
-        'svc.m.note4':'Urgence (livraison &lt;5 jours) : <strong>+15&euro; / titre</strong>',
+        'svc.m.note3':'Mastering : 2 offertes, supplément <strong>15&euro; chacune</strong>',
+        'svc.m.note4':'Urgence (&lt;5 jours) : <strong>+15&euro; / titre</strong>',
         'svc.x.label':'Mixage','svc.x.stems20':'Multitracks jusqu\'à 20 stems',
+        'svc.x.stems20.sub':'Session standard, idéale pour la plupart des productions électroniques',
         'svc.x.stemsplus':'Multitracks +20 stems',
+        'svc.x.stemsplus.sub':'Session étendue pour les productions denses ou hybrides',
         'svc.x.video':'Vidéo de la session de mix + explications',
-        'svc.x.video.sub':'Lien YouTube privé',
+        'svc.x.video.sub':'Session commentée, lien YouTube privé',
         'svc.x.restoration':'Restauration audio / Édition / Débruitage',
-        'svc.x.note1':'3 révisions offertes &mdash; supplémentaires : <strong>15&euro; chacune</strong>',
-        'svc.deal.label':'Pack Mix + Master digital',
+        'svc.x.restoration.sub':'Podcast, nettoyage vocal, clic, ronflement, souffle et bruit de fond',
+        'svc.x.note1':'Mixage : 3 offertes, supplément <strong>15&euro; chacune</strong>',
+        'svc.disc.label':'Remises','svc.rev.label':'Révisions','svc.del.label':'Livraison',
+        'svc.pay.note2':'Tarifs susceptibles de changer<br>au moment de la réservation.',
+        'svc.deal.label':'Mix + Digital Master Pack',
+        'svc.deal.desc':'Du multitrack brut au master prêt pour la scène',
         'svc.deal.s1':'Jusqu\'à 20 stems','svc.deal.s2':'20 à 50 stems',
         'svc.deal.s3':'50+ stems','svc.on_request':'Sur demande',
         'svc.pay.label':'Moyens de paiement',
         'svc.pay.methods':'Virement bancaire &nbsp;&middot;&nbsp; Lydia &nbsp;&middot;&nbsp; PayPal',
         'svc.pay.note':'Frais internationaux PayPal (5%) à la charge du client.<br>Tarifs susceptibles d\'évoluer au moment de la réservation. Mise à jour : 01.12.25',
-        'works.eyebrow':'Réalisations','works.title':'Quelques projets sur lesquels j\'ai travaillé','works.hint':'← Faites glisser →',
-        'port.eyebrow':'Portfolio','port.title':'Écoutez mon travail',
+        'trusted.eyebrow':'Clients','trusted.title':'Ils me font confiance',
+        'trusted.artists.label':'Artistes','trusted.labels.label':'Labels',
+        'works.eyebrow':'Réalisations','works.title':'Sélection','works.hint':'← Faites glisser →',
+        'port.eyebrow':'Portfolio','port.title':'Références',
         'port.sub':'Playlist · Extraits Mix &amp; Mastering',
         'port.sc_link':'Ouvrir sur SoundCloud',
         'prep.eyebrow':'Guide technique',
-        'prep.title':'Comment préparer votre titre',
+        'prep.title':'Checklist',
         'prep.tab.m':'Pour le mastering','prep.tab.x':'Pour le mixage',
         'pm.1.t':'Format de fichier','pm.1.p':'Exportez en <code>WAV</code> ou <code>AIFF</code>, <code>24 bits</code> ou <code>32 bits</code>, à <code>44,1 kHz</code> ou plus. Normalize : <code>Off</code>. Dither : <code>Off</code>.',
-        'pm.2.t':'Headroom','pm.2.p':'Gardez votre bus master en dessous de <code>0 dBTP</code>. Visez des pics autour de <code>&minus;6 dBTP</code>. N\'utilisez pas de limiteur pour corriger l\'écrêtage — baissez plutôt l\'ensemble des pistes.',
+        'pm.2.t':'Headroom','pm.2.p':'Gardez votre bus master en dessous de <code>0 dBTP</code>. Visez des pics autour de <code>&minus;6 dBTP</code>. N\'utilisez pas de limiteur pour corriger l\'écrêtage. Baissez plutôt l\'ensemble des pistes collectivement.',
         'pm.3.t':'Contrôle de la dynamique','pm.3.p':'Évitez de sur-compresser votre mix. Une dynamique bien contrôlée laisse plus de marge au mastering et donne un son plus percutant.',
         'pm.4.t':'Début &amp; fin du titre','pm.4.p':'Laissez au moins <code>100 ms</code> de silence au début et <code>2 secondes</code> à la fin. Cela préserve les transitoires et les queues de réverbe lors du mastering.',
         'pm.5.t':'Pas de traitement sur le bus master','pm.5.p':'Retirez tous les compresseurs, EQ, élargisseurs stéréo et limiteurs du canal master. Un signal propre permet un mastering plus efficace.',
@@ -2101,11 +2552,11 @@
         'px.4.t':'Pas de traitement','px.4.p':'Retirez tous les EQ, compresseurs, réverbes et effets des pistes individuelles. Si un effet est essentiel (ex. simulation d\'ampli), envoyez les versions wet et dry. Pics en dessous de <code>&minus;12 dB</code> sur le master.',
         'px.5.t':'Matériaux supplémentaires','px.5.p':'Fournissez un titre de référence ou votre propre auto-mix. Incluez des notes de session avec des instructions spécifiques ou des indications créatives pour le mix.',
         'px.6.t':'Transfert de fichiers','px.6.p':'Nommez votre dossier <em>Nom Artiste &ndash; Nom Titre</em>, compressez-le en ZIP, et envoyez-le via WeTransfer, Dropbox ou Google Drive. Partagez le lien à <code>onl.contact.off@gmail.com</code>.',
-        'process.eyebrow':'Process','process.title':'Comment ça marche',
+        'process.eyebrow':'Process','process.title':'Les Étapes',
         'process.s1.t':'Envoyez votre mix','process.s1.p':"Déposez vos fichiers via WeTransfer, Dropbox ou Google Drive et envoyez-moi le lien. Je m'occupe du reste.",
-        'process.s2.t':'Recevez un retour','process.s2.p':'Avant tout, vous recevez des notes détaillées sur votre mix — dynamique, balance, EQ. Complètement gratuit.',
+        'process.s2.t':'Recevez un retour','process.s2.p':'Avant tout, vous recevez des notes détaillées sur votre mix : dynamique, balance, EQ. Complètement gratuit.',
         'process.s3.t':'Session de mastering','process.s3.p':'Je masterise votre titre avec précision, en visant les standards club et streaming sans perdre le punch.',
-        'process.s4.t':'Livraison finale','process.s4.p':'Vous recevez vos fichiers master — WAV, MP3, version vinyle si besoin — avec 2 révisions incluses.',
+        'process.s4.t':'Livraison finale','process.s4.p':'Vous recevez vos fichiers master (WAV, MP3, version vinyle si besoin) avec 2 révisions incluses.',
         'contact.eyebrow':'Contact','contact.title':'On travaille ensemble ?',
         'contact.text':"Envoyez-moi vos titres, je réponds à tout le monde. Rapidement.",
         'form.name':'Nom','form.email':'Email','form.service':'Prestation',
@@ -2113,11 +2564,13 @@
         'form.service.master':'Mastering digital','form.service.vinyl':'Pré-master vinyle',
         'form.service.stems':'Mastering stems','form.service.mix':'Mixage','form.service.mixmaster':'Mix + Master',
         'form.message':'Message','form.submit':'Envoyer',
-        'form.note':'Ou directement à','form.success':'Message envoyé — je vous réponds très vite.',
+        'form.note':'Ou directement à <a href="mailto:onl.contact.off@gmail.com" style="color:var(--accent)">onl.contact.off@gmail.com</a>','form.success':'Message envoyé. Je vous réponds très vite.',
         'ci.email':'Email','ci.files':'Envoyer les fichiers via','ci.payment':'Paiement',
         'ci.payment.val':'Virement bancaire &nbsp;&middot;&nbsp; Lydia &nbsp;&middot;&nbsp; PayPal',
         'ci.listen':'Écouter mon travail',
-        'footer.text':'&copy; 2025 Jean-Charles Onillon &mdash; Mix &amp; Mastering',
+        'footer.text':'&copy; 2026 Jean-Charles Onillon &mdash; Mix &amp; Mastering',
+        'footer.legal':'Vos données de contact sont traitées via <a href="https://formspree.io/legal/privacy-policy" target="_blank" rel="noopener">Formspree</a> dans le seul but de répondre à votre demande. Aucune donnée n\'est conservée ou revendue.',
+        'footer.mentions':'Mentions légales &amp; Confidentialité',
       }
     };
 
@@ -2145,6 +2598,9 @@
     document.querySelectorAll('.lang-btn').forEach(b =>
       b.addEventListener('click', () => setLang(b.dataset.lang))
     );
+
+    /* Initialise les traductions dès le chargement */
+    setLang('en');
 
     /* ─── PAGE LOADER ───────────────────────────────────────────────────────── */
     (function () {
@@ -2547,11 +3003,29 @@
       });
     }
 
-    /* ─── NAV SCROLL ───────────────────────────────────────────────────────── */
+    /* ─── NAV SCROLL + ACTIVE STATE ───────────────────────────────────────── */
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () =>
       navbar.classList.toggle('scrolled', scrollY > 50)
     , { passive: true });
+
+    /* Highlight nav link matching current section */
+    (function () {
+      const sections = ['about','services','works','process','portfolio','preparation','contact']
+        .map(id => document.getElementById(id))
+        .filter(Boolean);
+      const links = document.querySelectorAll('.nav-links a[href^="#"]');
+      function updateActive() {
+        const scrollMid = scrollY + window.innerHeight * 0.35;
+        let current = null;
+        sections.forEach(s => { if (s.offsetTop <= scrollMid) current = s.id; });
+        links.forEach(a => {
+          a.classList.toggle('nav-active', a.getAttribute('href') === '#' + current);
+        });
+      }
+      window.addEventListener('scroll', updateActive, { passive: true });
+      updateActive();
+    })();
 
     /* ─── HAMBURGER ────────────────────────────────────────────────────────── */
     const hamburger = document.getElementById('hamburgerBtn');
@@ -2671,9 +3145,14 @@
         const gridObs = new IntersectionObserver(entries => {
           entries.forEach(e => {
             if (e.isIntersecting) {
-              children.forEach(el => {
+              children.forEach((el, i) => {
+                const delay = i * 0.09;
                 el.style.opacity   = '1';
                 el.style.transform = 'translateY(0)';
+                setTimeout(() => {
+                  el.style.transform  = '';
+                  el.style.transition = '';
+                }, (0.85 + delay) * 1000 + 80);
               });
               gridObs.unobserve(e.target);
             }
@@ -2691,9 +3170,43 @@
       heroEl.style.setProperty('--grain-y', Math.round(scrollY * 0.18) + 'px');
     }, { passive: true });
 
+/* ─── HERO CURSOR GLOW ────────────────────────────────────────────────── */
+    const glowEl = document.getElementById('heroGlow');
+    if (glowEl) {
+      heroEl.addEventListener('mousemove', (e) => {
+        const rect = heroEl.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        glowEl.style.setProperty('--glow-x', x + '%');
+        glowEl.style.setProperty('--glow-y', y + '%');
+      }, { passive: true });
+      heroEl.addEventListener('mouseleave', () => {
+        glowEl.style.setProperty('--glow-x', '70%');
+        glowEl.style.setProperty('--glow-y', '50%');
+      });
+    }
+
+    const contactEl = document.getElementById('contact');
+    const contactGlow = document.getElementById('contactGlow');
+    if (contactEl && contactGlow) {
+      contactEl.addEventListener('mousemove', (e) => {
+        const rect = contactEl.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        contactGlow.style.setProperty('--glow-x', x + '%');
+        contactGlow.style.setProperty('--glow-y', y + '%');
+      }, { passive: true });
+      contactGlow.style.setProperty('--glow-x', '30%');
+      contactGlow.style.setProperty('--glow-y', '50%');
+      contactEl.addEventListener('mouseleave', () => {
+        contactGlow.style.setProperty('--glow-x', '30%');
+        contactGlow.style.setProperty('--glow-y', '50%');
+      });
+    }
+
 
     /* ─── MAGNÉTISME BOUTONS ───────────────────────────────────────────────── */
-    document.querySelectorAll('.btn-primary, .btn-outline').forEach(btn => {
+    if (!prefersReducedMotion) document.querySelectorAll('.btn-primary, .btn-outline').forEach(btn => {
       btn.addEventListener('mouseenter', () => {
         btn.style.transition = 'transform 0.1s ease';
       });
@@ -2710,7 +3223,7 @@
     });
 
     /* ─── TILT 3D GALERIE ──────────────────────────────────────────────────── */
-    document.querySelectorAll('.work-item').forEach(item => {
+    if (!prefersReducedMotion) document.querySelectorAll('.work-item').forEach(item => {
       item.addEventListener('mousemove', e => {
         const r = item.getBoundingClientRect();
         const x = ((e.clientX - r.left) / r.width  - 0.5) * 14;
@@ -2724,25 +3237,43 @@
       });
     });
 
-    /* ─── COMPTEURS STATS ──────────────────────────────────────────────────── */
+    /* ─── COMPTEURS STATS (ENHANCED) ─────────────────────────────────────────── */
+    function easeOutExpo(t) {
+      return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+    }
+
     function animCount(el) {
-      const raw = el.textContent.match(/[\d,]+/);
-      if (!raw) return;
-      const target = parseInt(raw[0].replace(',', ''));
+      if (prefersReducedMotion) return; /* garder le texte tel quel */
       const full = el.textContent;
+      const raw = full.match(/[\d,]+/);
+
+      // If no number found (like "Free"), just fade in
+      if (!raw) {
+        el.style.opacity = '0';
+        el.style.transition = 'opacity 0.8s ease-out';
+        requestAnimationFrame(() => {
+          el.style.opacity = '1';
+        });
+        return;
+      }
+
+      const target = parseInt(raw[0].replace(/,/g, ''));
       const prefix = full.slice(0, full.indexOf(raw[0]));
       const suffix = full.slice(full.indexOf(raw[0]) + raw[0].length);
+
       let start = null;
-      const dur = 1500;
+      const dur = 2000; // 2 seconds
       const step = ts => {
         if (!start) start = ts;
         const p = Math.min((ts - start) / dur, 1);
-        const eased = 1 - Math.pow(1 - p, 3);
-        el.textContent = prefix + Math.floor(eased * target).toLocaleString('fr-FR').replace('\u202f','') + suffix;
+        const eased = easeOutExpo(p);
+        const current = Math.floor(eased * target);
+        el.textContent = prefix + current.toLocaleString('en-US') + suffix;
         if (p < 1) requestAnimationFrame(step);
       };
       requestAnimationFrame(step);
     }
+
     const statObs = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting) {
@@ -2753,6 +3284,55 @@
     }, { threshold: 0.5 });
     document.querySelectorAll('.about-meta').forEach(el => statObs.observe(el));
 
+
+    /* ─── SCROLL PROGRESS BAR + BACK TO TOP ─────────────────────────────────── */
+    const progressBar = document.getElementById('scrollProgress');
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrolled = window.scrollY;
+      if (progressBar) {
+        const progress = scrollHeight > 0 ? (scrolled / scrollHeight) * 100 : 0;
+        progressBar.style.transform = 'scaleX(' + (progress / 100) + ')';
+      }
+      if (backToTop) {
+        backToTop.classList.toggle('visible', scrolled > 600);
+      }
+    }, { passive: true });
+    if (backToTop) {
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    /* ─── PARALLAXE SUBTILE ───────────────────────────────────────────────────── */
+    var parallaxEls = document.querySelectorAll('[data-parallax]');
+    if (parallaxEls.length > 0 && !prefersReducedMotion) {
+      window.addEventListener('scroll', function() {
+        var viewH = window.innerHeight;
+        parallaxEls.forEach(function(el) {
+          if (!el.classList.contains('visible') && el.classList.contains('reveal')) return;
+          var r = el.getBoundingClientRect();
+          var center = r.top + r.height / 2;
+          var offset = (center - viewH / 2) * parseFloat(el.dataset.parallax);
+          el.style.transform = 'translateY(' + offset + 'px)';
+        });
+      }, { passive: true });
+    }
+
+    /* ─── FORM INPUT ANIMATION ────────────────────────────────────────────────── */
+    document.querySelectorAll('.form-group input, .form-group textarea').forEach(function(input) {
+      input.addEventListener('focus', function() {
+        input.parentElement.style.transform = 'translateY(-2px)';
+        input.parentElement.style.transition = 'transform 0.3s cubic-bezier(0.16,1,0.3,1)';
+      });
+      input.addEventListener('blur', function() {
+        input.parentElement.style.transform = '';
+      });
+    });
+
+  })();
   </script>
+
 </body>
 </html>
